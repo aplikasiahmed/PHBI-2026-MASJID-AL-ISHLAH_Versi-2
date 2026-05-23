@@ -12,7 +12,7 @@ const InputSection: React.FC = () => {
     addWeeklyData, updateWeeklyData, deleteWeeklyData, 
     addDonor, updateDonor, deleteDonor, 
     addExpense, updateExpense, deleteExpense,
-    updatePublishedItem, deletePublishedItem
+    addPublishedItem, updatePublishedItem, deletePublishedItem
   } = useData();
   
   const [activeTab, setActiveTab] = useState<'previous' | 'weekly' | 'donor' | 'expense'>('previous');
@@ -29,22 +29,30 @@ const InputSection: React.FC = () => {
   const sortByDateAsc = (a: any, b: any) => new Date(a.date).getTime() - new Date(b.date).getTime();
 
   const allPreviousFunds = [
-      ...stagedData.previousFunds.map(i => ({ ...i, source: 'staged' as const })),
+      ...stagedData.previousFunds
+          .filter(i => !publishedData.previousFunds.some(p => p.id === i.id))
+          .map(i => ({ ...i, source: 'staged' as const })),
       ...publishedData.previousFunds.map(i => ({ ...i, source: 'published' as const }))
   ].sort(sortByDateAsc);
 
   const allWeeklyData = [
-      ...stagedData.weeklyData.map(i => ({ ...i, source: 'staged' as const })),
+      ...stagedData.weeklyData
+          .filter(i => !publishedData.weeklyData.some(p => p.id === i.id))
+          .map(i => ({ ...i, source: 'staged' as const })),
       ...publishedData.weeklyData.map(i => ({ ...i, source: 'published' as const }))
   ].sort(sortByDateAsc);
 
   const allDonors = [
-      ...stagedData.donors.map(i => ({ ...i, source: 'staged' as const })),
+      ...stagedData.donors
+          .filter(i => !publishedData.donors.some(p => p.id === i.id))
+          .map(i => ({ ...i, source: 'staged' as const })),
       ...publishedData.donors.map(i => ({ ...i, source: 'published' as const }))
   ].sort(sortByDateAsc);
 
   const allExpenses = [
-      ...stagedData.expenses.map(i => ({ ...i, source: 'staged' as const })),
+      ...stagedData.expenses
+          .filter(i => !publishedData.expenses.some(p => p.id === i.id))
+          .map(i => ({ ...i, source: 'staged' as const })),
       ...publishedData.expenses.map(i => ({ ...i, source: 'published' as const }))
   ].sort(sortByDateAsc);
 
@@ -197,7 +205,13 @@ const InputSection: React.FC = () => {
            confirmAction('Simpan Perubahan Draft?', 'Data draft akan diperbarui.', () => { updatePreviousFund(editingId, { date: prevForm.date, nominal: nominal }); cancelEdit(); Swal.fire('Sukses', 'Draft diupdate', 'success'); });
        }
     } else {
-       confirmAction('Simpan Data?', 'Simpan ke Draft?', () => { addPreviousFund({ date: prevForm.date, nominal: nominal }); setEditingId(null); Swal.fire('Berhasil!', 'Data disimpan ke draft.', 'success'); });
+       confirmAction('Simpan Data?', 'Apakah Anda yakin ingin menyimpan data ini langsung ke Google Sheets?', async () => {
+           const success = await addPublishedItem('DanaSebelumnya_data', { date: prevForm.date, nominal: nominal });
+           if (success) {
+               setPrevForm({ date: '', nominal: '' });
+               setEditingId(null);
+           }
+       });
     }
   };
 
@@ -238,7 +252,13 @@ const InputSection: React.FC = () => {
             confirmAction('Simpan Perubahan Draft?', 'Data draft akan diperbarui.', () => { const payload = { date: weekForm.date, week: weekForm.week, rt: weekForm.rt, grossAmount: gross, consumptionCut: consumption, commissionCut: commission, netAmount: net }; updateWeeklyData(editingId, payload); cancelEdit(); Swal.fire('Berhasil!', 'Draft diupdate.', 'success'); });
         }
     } else {
-        confirmAction('Simpan Data?', 'Simpan ke Draft?', () => { const payload = { date: weekForm.date, week: weekForm.week, rt: weekForm.rt, grossAmount: gross, consumptionCut: consumption, commissionCut: commission, netAmount: net }; addWeeklyData(payload); setWeekForm(prev => ({ ...prev, rt: 'Pilih RT', gross: '' })); setEditingId(null); Swal.fire('Berhasil!', 'Data disimpan.', 'success'); });
+        confirmAction('Simpan Data?', 'Apakah Anda yakin ingin menyimpan data ini langsung ke Google Sheets?', async () => {
+            const success = await addPublishedItem('Mingguan_data', { date: weekForm.date, week: weekForm.week, rt: weekForm.rt, grossAmount: gross, consumptionCut: consumption, commissionCut: commission, netAmount: net });
+            if (success) {
+                setWeekForm(prev => ({ ...prev, rt: 'Pilih RT', gross: '' }));
+                setEditingId(null);
+            }
+        });
     }
   };
 
@@ -256,7 +276,13 @@ const InputSection: React.FC = () => {
             confirmAction('Simpan Perubahan Draft?', 'Data draft akan diperbarui.', () => { updateDonor(editingId, { date: donorForm.date, name: donorForm.name, nominal: nominal }); cancelEdit(); Swal.fire('Sukses', 'Draft diupdate', 'success'); });
         }
     } else {
-        confirmAction('Simpan Data?', 'Simpan ke Draft?', () => { addDonor({ date: donorForm.date, name: donorForm.name, nominal: nominal }); setDonorForm(prev => ({ ...prev, name: '', nominal: '' })); setEditingId(null); Swal.fire('Berhasil', 'Data tersimpan', 'success'); });
+        confirmAction('Simpan Data?', 'Apakah Anda yakin ingin menyimpan data ini langsung ke Google Sheets?', async () => {
+            const success = await addPublishedItem('Donatur_data', { date: donorForm.date, name: donorForm.name, nominal: nominal });
+            if (success) {
+                setDonorForm(prev => ({ ...prev, name: '', nominal: '' }));
+                setEditingId(null);
+            }
+        });
     }
   };
 
@@ -274,7 +300,13 @@ const InputSection: React.FC = () => {
             confirmAction('Simpan Perubahan Draft?', 'Data draft akan diperbarui.', () => { updateExpense(editingId, { date: expForm.date, purpose: expForm.purpose, nominal: nominal }); cancelEdit(); Swal.fire('Sukses', 'Draft diupdate', 'success'); });
         }
     } else {
-        confirmAction('Simpan Data?', 'Simpan ke Draft?', () => { addExpense({ date: expForm.date, purpose: expForm.purpose, nominal: nominal }); setExpForm(prev => ({ ...prev, purpose: '', nominal: '' })); setEditingId(null); Swal.fire('Berhasil', 'Data tersimpan', 'success'); });
+        confirmAction('Simpan Data?', 'Apakah Anda yakin ingin menyimpan data ini langsung ke Google Sheets?', async () => {
+            const success = await addPublishedItem('Pengeluaran_data', { date: expForm.date, purpose: expForm.purpose, nominal: nominal });
+            if (success) {
+                setExpForm(prev => ({ ...prev, purpose: '', nominal: '' }));
+                setEditingId(null);
+            }
+        });
     }
   };
 
@@ -370,8 +402,8 @@ const InputSection: React.FC = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {allPreviousFunds.map((d: any) => (
-                            <tr key={d.id} className={`border-b border-gray-50 hover:bg-gray-50 transition ${editingId === d.id ? 'bg-blue-50' : ''}`}>
+                        {allPreviousFunds.map((d: any, idx) => (
+                            <tr key={`${d.id}-${d.source}-${idx}`} className={`border-b border-gray-50 hover:bg-gray-50 transition ${editingId === d.id ? 'bg-blue-50' : ''}`}>
                                 <td className="p-3">{renderStatusBadge(d.source)}</td>
                                 <td className={`p-3 ${d.source === 'staged' ? 'text-red-600 font-medium' : 'text-gray-700'}`}>{formatDate(d.date)}</td>
                                 <td className={`p-3 font-bold ${d.source === 'staged' ? 'text-red-600' : 'text-gray-900'}`}>{formatCurrency(d.nominal)}</td>
@@ -399,7 +431,7 @@ const InputSection: React.FC = () => {
                         </thead>
                         <tbody>
                             {allPreviousFunds.map((d, idx) => (
-                                <tr key={d.id} className="border-b border-gray-50 bg-white">
+                                <tr key={`${d.id}-${d.source}-${idx}`} className="border-b border-gray-50 bg-white">
                                     <td className="py-2 text-center text-gray-500 border-r border-gray-100 align-top">{idx+1}</td>
                                     <td className="py-2 text-center align-top border-r border-gray-100">
                                         <div className="flex justify-center mb-1">{renderStatusBadge(d.source)}</div>
@@ -501,8 +533,8 @@ const InputSection: React.FC = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {allWeeklyData.map(d => (
-                                <tr key={d.id} className={`border-b border-gray-50 hover:bg-gray-50 transition ${editingId === d.id ? 'bg-blue-50' : ''}`}>
+                            {allWeeklyData.map((d, idx) => (
+                                <tr key={`${d.id}-${d.source}-${idx}`} className={`border-b border-gray-50 hover:bg-gray-50 transition ${editingId === d.id ? 'bg-blue-50' : ''}`}>
                                     <td className="p-3">{renderStatusBadge(d.source)}</td>
                                     <td className={`p-3 whitespace-nowrap ${d.source === 'staged' ? 'text-red-600 font-medium' : 'text-gray-700'}`}>{formatDateShort(d.date)}</td> 
                                     <td className="p-3 font-medium">
@@ -537,7 +569,7 @@ const InputSection: React.FC = () => {
                         </thead>
                         <tbody className="divide-y divide-gray-100">
                             {allWeeklyData.map((d, idx) => (
-                                <tr key={d.id} className="bg-white">
+                                <tr key={`${d.id}-${d.source}-${idx}`} className="bg-white">
                                     <td className="py-2 text-center text-gray-500 align-middle border-r border-gray-100">{idx+1}</td>
                                     <td className="py-1 px-1 text-center align-middle border-r border-gray-100">
                                         <div className="flex justify-center mb-1">{renderStatusBadge(d.source)}</div>
@@ -615,8 +647,8 @@ const InputSection: React.FC = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {allDonors.map((d: any) => (
-                                <tr key={d.id} className={`border-b border-gray-50 hover:bg-gray-50 transition ${editingId === d.id ? 'bg-blue-50' : ''}`}>
+                            {allDonors.map((d: any, idx) => (
+                                <tr key={`${d.id}-${d.source}-${idx}`} className={`border-b border-gray-50 hover:bg-gray-50 transition ${editingId === d.id ? 'bg-blue-50' : ''}`}>
                                     <td className="p-3">{renderStatusBadge(d.source)}</td>
                                     <td className={`p-3 ${d.source === 'staged' ? 'text-red-600 font-medium' : 'text-gray-700'}`}>{formatDate(d.date)}</td>
                                     <td className={`p-3 font-medium ${d.source === 'staged' ? 'text-red-600' : 'text-gray-800'}`}>{d.name}</td>
@@ -646,7 +678,7 @@ const InputSection: React.FC = () => {
                         </thead>
                         <tbody>
                             {allDonors.map((d, idx) => (
-                                <tr key={d.id} className="border-b border-gray-50 bg-white">
+                                <tr key={`${d.id}-${d.source}-${idx}`} className="border-b border-gray-50 bg-white">
                                     <td className="py-2 text-center text-gray-500 align-top border-r border-gray-100">{idx+1}</td>
                                     <td className="py-2 text-center align-top border-r border-gray-100">
                                         <div className="flex justify-center mb-1">{renderStatusBadge(d.source)}</div>
@@ -716,8 +748,8 @@ const InputSection: React.FC = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {allExpenses.map((d: any) => (
-                                <tr key={d.id} className={`border-b border-gray-50 hover:bg-gray-50 transition ${editingId === d.id ? 'bg-blue-50' : ''}`}>
+                            {allExpenses.map((d: any, idx) => (
+                                <tr key={`${d.id}-${d.source}-${idx}`} className={`border-b border-gray-50 hover:bg-gray-50 transition ${editingId === d.id ? 'bg-blue-50' : ''}`}>
                                     <td className="p-3">{renderStatusBadge(d.source)}</td>
                                     <td className={`p-3 ${d.source === 'staged' ? 'text-red-600 font-medium' : 'text-gray-700'}`}>{formatDate(d.date)}</td>
                                     <td className={`p-3 ${d.source === 'staged' ? 'text-red-600' : 'text-gray-800'}`}>{d.purpose}</td>
@@ -747,7 +779,7 @@ const InputSection: React.FC = () => {
                         </thead>
                         <tbody>
                             {allExpenses.map((d, idx) => (
-                                <tr key={d.id} className="border-b border-gray-50 bg-white">
+                                <tr key={`${d.id}-${d.source}-${idx}`} className="border-b border-gray-50 bg-white">
                                     <td className="py-2 text-center text-gray-500 align-top border-r border-gray-100">{idx+1}</td>
                                     <td className="py-2 text-center align-top border-r border-gray-100">
                                         <div className="flex justify-center mb-1">{renderStatusBadge(d.source)}</div>

@@ -9,7 +9,7 @@ import { LayoutDashboard, FileInput, Eye, FileText, RefreshCcw, LogOut, UserChec
 import Swal from 'sweetalert2';
 
 const AdminDashboard: React.FC = () => {
-  const { logout, currentUser } = useData();
+  const { logout, currentUser, accessToken, googleLogin, appsScriptUrl } = useData();
   const [activePage, setActivePage] = useState<'input' | 'preview' | 'report' | 'reset' | 'users'>('input');
 
   const handleLogout = () => {
@@ -62,6 +62,29 @@ const AdminDashboard: React.FC = () => {
                  </div>
 
                  <div className="flex items-center gap-2 md:gap-4">
+                     {/* Google Link Status Badge or Button */}
+                     {appsScriptUrl ? (
+                       <div className="flex items-center gap-1 bg-emerald-50 px-2.5 py-1 md:px-3 md:py-1.5 rounded-full border border-emerald-200 shadow-sm">
+                         <span className="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                         <span className="text-[8px] md:text-[9px] font-bold text-emerald-800 uppercase hidden md:inline">Otomatis Terhubung</span>
+                         <span className="text-[8px] md:text-[9px] font-bold text-emerald-800 uppercase md:hidden">Otomatis</span>
+                       </div>
+                     ) : !accessToken ? (
+                       <button
+                         onClick={googleLogin}
+                         className="flex items-center gap-1 bg-amber-500 hover:bg-amber-600 text-white px-2 py-1 md:px-3 md:py-1.5 rounded-full text-[9px] md:text-xs font-bold transition shadow-sm active:scale-95 animate-pulse"
+                         title="Silakan hubungkan akun Google untuk menulis data"
+                       >
+                         <span>Sambungkan Google</span>
+                       </button>
+                     ) : (
+                       <div className="flex items-center gap-1 bg-emerald-50 px-2.5 py-1 md:px-3 md:py-1.5 rounded-full border border-emerald-100">
+                         <span className="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                         <span className="text-[8px] md:text-[9px] font-bold text-emerald-800 uppercase hidden md:inline">Google Terhubung</span>
+                         <span className="text-[8px] md:text-[9px] font-bold text-emerald-800 uppercase md:hidden">Sheets</span>
+                       </div>
+                     )}
+
                      {/* Active User Badge */}
                      <div className="flex items-center gap-1 md:gap-2 bg-emerald-50 px-2 py-1 md:px-3 md:py-1.5 rounded-full border border-emerald-100 animate-fade-in-up">
                         <div className="bg-emerald-200 p-0.5 md:p-1 rounded-full">

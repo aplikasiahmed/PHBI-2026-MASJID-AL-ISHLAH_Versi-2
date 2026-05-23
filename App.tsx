@@ -10,12 +10,26 @@ import { Eye, EyeOff, UserPlus } from 'lucide-react';
 
 // Inner component to access context
 const MainContent: React.FC = () => {
-  const { isLoggedIn, login, verifyUser } = useData();
+  const { isLoggedIn, login, verifyUser, googleLogin } = useData();
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+
+  const handleGoogleLogin = async () => {
+    setIsLoading(true);
+    try {
+      const success = await googleLogin();
+      if (success) {
+        setIsLoginModalOpen(false);
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleLoginSubmit = async () => {
     // 1. Validasi Kolom Wajib Diisi
@@ -100,30 +114,26 @@ const MainContent: React.FC = () => {
       {/* Login Modal */}
       {isLoginModalOpen && (
         <Modal title="Masuk Admin" onClose={() => setIsLoginModalOpen(false)}>
-           {/* Mengurangi space vertical agar lebih padat di mobile */}
-           <div className="space-y-2.5 md:space-y-5">
+           <div className="space-y-4 md:space-y-5">
               <div>
-                {/* Font label lebih kecil */}
-                <label className="block text-[10px] md:text-sm font-semibold text-gray-700 mb-0.5 md:mb-1">Username</label>
+                <label className="block text-xs md:text-sm font-semibold text-gray-750 mb-1">Username / Email</label>
                 <input 
                   type="text" 
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
-                  // Padding input diperkecil (py-1.5) dan font diperkecil (text-xs)
-                  className="w-full bg-white border border-gray-300 text-gray-900 rounded-lg px-3 py-1.5 md:px-4 md:py-3 text-xs md:text-sm focus:ring-1 focus:ring-primary focus:border-primary outline-none shadow-sm transition placeholder:text-gray-400"
-                  placeholder="Masukkan Username"
+                  className="w-full bg-white border border-gray-300 text-gray-950 rounded-lg px-3 py-2.5 md:px-4 md:py-3 text-xs md:text-sm focus:ring-1 focus:ring-primary focus:border-primary outline-none shadow-sm transition placeholder:text-gray-400"
+                  placeholder="Masukkan Nama atau Email"
                   disabled={isLoading}
                 />
               </div>
               <div>
-                <label className="block text-[10px] md:text-sm font-semibold text-gray-700 mb-0.5 md:mb-1">Password</label>
+                <label className="block text-xs md:text-sm font-semibold text-gray-750 mb-1">Password</label>
                 <div className="relative">
                   <input 
                     type={showPassword ? "text" : "password"} 
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    // Padding input diperkecil (py-1.5)
-                    className="w-full bg-white border border-gray-300 text-gray-900 rounded-lg px-3 py-1.5 md:px-4 md:py-3 pr-8 md:pr-10 text-xs md:text-sm focus:ring-1 focus:ring-primary focus:border-primary outline-none shadow-sm transition placeholder:text-gray-400"
+                    className="w-full bg-white border border-gray-300 text-gray-950 rounded-lg px-3 py-2.5 md:px-4 md:py-3 pr-8 md:pr-10 text-xs md:text-sm focus:ring-1 focus:ring-primary focus:border-primary outline-none shadow-sm transition placeholder:text-gray-400"
                     placeholder="Masukkan Password"
                     disabled={isLoading}
                   />
@@ -138,21 +148,21 @@ const MainContent: React.FC = () => {
                 </div>
               </div>
               
-              <div className="flex flex-col gap-2 md:gap-3 pt-1 md:pt-2">
+              <div className="flex flex-col gap-2 md:gap-3 pt-2">
                 <div className="flex gap-2 md:gap-3">
                   <button 
                     onClick={() => setIsLoginModalOpen(false)}
-                    // Tombol Batal diperkecil paddingnya
-                    className="flex-1 bg-red-500 hover:bg-red-700 text-white py-1.5 md:py-3 rounded-lg font-bold shadow-md transition flex items-center justify-center gap-1.5 text-xs md:text-sm"
+                    className="flex-1 bg-gray-150 hover:bg-gray-200 text-gray-700 py-2 md:py-3 rounded-lg font-bold transition flex items-center justify-center gap-1.5 text-xs md:text-sm"
                     disabled={isLoading}
+                    type="button"
                   >
                     Batal
                   </button>
                   <button 
                     onClick={handleLoginSubmit}
                     disabled={isLoading}
-                    // Tombol Masuk diperkecil paddingnya
-                    className="flex-1 bg-primary text-white py-1.5 md:py-3 rounded-lg hover:bg-emerald-800 font-bold shadow-md transition text-xs md:text-sm flex justify-center items-center"
+                    className="flex-1 bg-primary text-white py-2 md:py-3 rounded-lg hover:bg-emerald-800 font-bold shadow-md transition text-xs md:text-sm flex justify-center items-center"
+                    type="button"
                   >
                     {isLoading ? (
                       <span className="inline-block w-3 h-3 md:w-4 md:h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
@@ -162,8 +172,7 @@ const MainContent: React.FC = () => {
                   </button>
                 </div>
 
-                {/* Separator lebih tipis */}
-                <div className="relative flex py-0.5 md:py-2 items-center">
+                <div className="relative flex py-1 items-center">
                     <div className="flex-grow border-t border-gray-200"></div>
                     <span className="flex-shrink-0 mx-2 text-gray-400 text-[9px] md:text-xs">Atau</span>
                     <div className="flex-grow border-t border-gray-200"></div>
@@ -171,8 +180,8 @@ const MainContent: React.FC = () => {
 
                 <button 
                   onClick={handleRegisterClick}
-                  // Tombol Daftar diperkecil paddingnya
-                  className="w-full bg-blue-600 hover:bg-blue-700 text-white py-1.5 md:py-3 rounded-lg font-bold shadow-md transition flex items-center justify-center gap-1.5 text-xs md:text-sm"
+                  className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 md:py-3 rounded-lg font-bold shadow-md transition flex items-center justify-center gap-1.5 text-xs md:text-sm"
+                  type="button"
                 >
                   <UserPlus size={14} className="md:w-[18px] md:h-[18px]" /> Daftar Akun Baru
                 </button>
