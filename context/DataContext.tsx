@@ -163,12 +163,25 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       let metaRows: string[][];
 
       if (accessToken) {
-        // Fetch real-time live data with API v4
-        prevFundsRows = await fetchSheetAPI('DanaSebelumnya', accessToken);
-        weeklyRows = await fetchSheetAPI('Mingguan', accessToken);
-        donorsRows = await fetchSheetAPI('Donatur', accessToken);
-        expensesRows = await fetchSheetAPI('Pengeluaran', accessToken);
-        metaRows = await fetchSheetAPI('Meta', accessToken);
+        try {
+          // Fetch real-time live data with API v4
+          prevFundsRows = await fetchSheetAPI('DanaSebelumnya', accessToken);
+          weeklyRows = await fetchSheetAPI('Mingguan', accessToken);
+          donorsRows = await fetchSheetAPI('Donatur', accessToken);
+          expensesRows = await fetchSheetAPI('Pengeluaran', accessToken);
+          metaRows = await fetchSheetAPI('Meta', accessToken);
+        } catch (apiErr: any) {
+          console.warn("fetchSheetAPI in loadData failed with token, falling back to fetchSheetCSV:", apiErr);
+          // Clear invalid/expired token so that future queries do not keep repeating the error
+          localStorage.removeItem('phbi_google_token');
+          setAccessToken(null);
+
+          prevFundsRows = await fetchSheetCSV('DanaSebelumnya');
+          weeklyRows = await fetchSheetCSV('Mingguan');
+          donorsRows = await fetchSheetCSV('Donatur');
+          expensesRows = await fetchSheetCSV('Pengeluaran');
+          metaRows = await fetchSheetCSV('Meta');
+        }
       } else {
         // Fetch via public link CSV (Fast and doesn't require keys)
         prevFundsRows = await fetchSheetCSV('DanaSebelumnya');
@@ -587,7 +600,12 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     try {
       let rows: string[][];
       if (accessToken) {
-        rows = await fetchSheetAPI('AdminUsers', accessToken);
+        try {
+          rows = await fetchSheetAPI('AdminUsers', accessToken);
+        } catch (apiErr) {
+          console.warn("fetchSheetAPI for AdminUsers failed. Falling back to fetchSheetCSV:", apiErr);
+          rows = await fetchSheetCSV('AdminUsers');
+        }
       } else {
         rows = await fetchSheetCSV('AdminUsers');
       }
@@ -602,6 +620,21 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       }));
     } catch (err) {
       console.error("Gagal mendapatkan daftar admin:", err);
+      // Fail gracefully and try reading CSV as last resort if not tried
+      try {
+        const rows = await fetchSheetCSV('AdminUsers');
+        if (rows.length > 1) {
+          return rows.slice(1).map(row => ({
+            id: row[0] || '',
+            username: row[1] || row[0] || 'Admin',
+            password: row[3] || '',
+            role: row[2] || '',
+            created_at: new Date().toISOString()
+          }));
+        }
+      } catch (innerErr) {
+        console.error("Fallback fetchSheetCSV also failed:", innerErr);
+      }
       return [];
     }
   };
@@ -617,7 +650,7 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         <div class="text-left text-xs space-y-2 leading-relaxed">
           <p>Untuk melakukan tindakan <strong>${actionDesc}</strong> ke Google Sheets, sistem memerlukan koneksi aman sekali saja.</p>
           <p class="font-semibold text-emerald-700">✓ Nama profil Anda akan tetap mempertahankan nama login asli Anda (<strong>${currentUser || 'Admin'}</strong>).</p>
-          <div class="mt-3 p-2 bg-amber-50 border border-amber-200 rounded text-[11px] text-amber-805 leading-normal">
+          <div class="mt-3 p-2 bg-amber-50 border border-amber-200 rounded text-[11px] text-amber-850 leading-normal">
             <strong>💡 Bypass Tanpa Akun Google (Rekomendasi):</strong><br/>
             Jika ingin menginput data tanpa login Google di HP / beda domain (Netlify) agar terbebas dari error otorisasi, silakan hubungkan <strong>URL Google Apps Script</strong> di tab <strong>Kelola Admin</strong> dengan kode server <strong>ALISHLAH2026</strong>.
           </div>
@@ -655,7 +688,13 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
             return false; 
           }
  
-          const rawRows = await fetchSheetAPI('AdminUsers', tokenToUse);
+          let rawRows: string[][];
+          if (tokenToUse === 'BYPASS_OAUTH' && appsScriptUrl) {
+              rawRows = await fetchSheetCSV('AdminUsers');
+          } else {
+              rawRows = await fetchSheetAPI('AdminUsers', tokenToUse);
+          }
+
           const newRow = [
             email,
             name,
@@ -663,7 +702,12 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
             newPassword
           ];
           
-          await writeSheetAPI('AdminUsers', [...rawRows, newRow], tokenToUse);
+          const finalRows = [...rawRows, newRow];
+          if (tokenToUse === 'BYPASS_OAUTH' && appsScriptUrl) {
+              await writeSheetAppsScript(appsScriptUrl, 'AdminUsers', finalRows);
+          } else {
+              await writeSheetAPI('AdminUsers', finalRows, tokenToUse);
+          }
           return true;
       } catch (error: any) { 
         Swal.fire('Error', error.message, 'error'); 
@@ -680,12 +724,24 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       if (!tokenToUse) return false;
 
       try {
-          const rawRows = await fetchSheetAPI('AdminUsers', tokenToUse);
-          const headers = rawRows[0];
+          let rawRows: string[][];
+          if (tokenToUse === 'BYPASS_OAUTH' && appsScriptUrl) {
+              rawRows = await fetchSheetCSV('AdminUsers');
+          } else {
+              rawRows = await fetchSheetAPI('AdminUsers', tokenToUse);
+          }
+
+          const headers = rawRows[0] || HEADERS_MAP.AdminUsers;
           const filtered = rawRows.slice(1).filter(r => r[0] !== id);
-          
-          await clearSheetAPI('AdminUsers', tokenToUse);
-          await writeSheetAPI('AdminUsers', [headers, ...filtered], tokenToUse);
+          const finalRows = [headers, ...filtered];
+
+          if (tokenToUse === 'BYPASS_OAUTH' && appsScriptUrl) {
+              await clearSheetAppsScript(appsScriptUrl, 'AdminUsers');
+              await writeSheetAppsScript(appsScriptUrl, 'AdminUsers', finalRows);
+          } else {
+              await clearSheetAPI('AdminUsers', tokenToUse);
+              await writeSheetAPI('AdminUsers', finalRows, tokenToUse);
+          }
           return true;
       } catch (error: any) { 
         Swal.fire('Error', error.message, 'error'); 
