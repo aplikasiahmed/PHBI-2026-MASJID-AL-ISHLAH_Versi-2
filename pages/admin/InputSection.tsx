@@ -205,12 +205,16 @@ const InputSection: React.FC = () => {
            confirmAction('Simpan Perubahan Draft?', 'Data draft akan diperbarui.', () => { updatePreviousFund(editingId, { date: prevForm.date, nominal: nominal }); cancelEdit(); Swal.fire('Sukses', 'Draft diupdate', 'success'); });
        }
     } else {
-       confirmAction('Simpan Data?', 'Apakah Anda yakin ingin menyimpan data ini langsung ke Google Sheets?', async () => {
-           const success = await addPublishedItem('DanaSebelumnya_data', { date: prevForm.date, nominal: nominal });
-           if (success) {
-               setPrevForm({ date: '', nominal: '' });
-               setEditingId(null);
-           }
+       confirmAction('Simpan Data?', 'Apakah Anda yakin ingin menyimpan data ini?', () => {
+           addPreviousFund({ date: prevForm.date, nominal: nominal });
+           setPrevForm({ date: '', nominal: '' });
+           setEditingId(null);
+           Swal.fire({
+               icon: 'success',
+               title: 'Berhasil dikirim ke Preview!',
+               text: 'Data sudah berhasil dikirim ke dashboard preview Data.',
+               confirmButtonColor: '#047857'
+           });
        });
     }
   };
@@ -252,12 +256,16 @@ const InputSection: React.FC = () => {
             confirmAction('Simpan Perubahan Draft?', 'Data draft akan diperbarui.', () => { const payload = { date: weekForm.date, week: weekForm.week, rt: weekForm.rt, grossAmount: gross, consumptionCut: consumption, commissionCut: commission, netAmount: net }; updateWeeklyData(editingId, payload); cancelEdit(); Swal.fire('Berhasil!', 'Draft diupdate.', 'success'); });
         }
     } else {
-        confirmAction('Simpan Data?', 'Apakah Anda yakin ingin menyimpan data ini langsung ke Google Sheets?', async () => {
-            const success = await addPublishedItem('Mingguan_data', { date: weekForm.date, week: weekForm.week, rt: weekForm.rt, grossAmount: gross, consumptionCut: consumption, commissionCut: commission, netAmount: net });
-            if (success) {
-                setWeekForm(prev => ({ ...prev, rt: 'Pilih RT', gross: '' }));
-                setEditingId(null);
-            }
+        confirmAction('Simpan Data?', 'Apakah Anda yakin ingin menyimpan data ini?', () => {
+            addWeeklyData({ date: weekForm.date, week: weekForm.week, rt: weekForm.rt, grossAmount: gross, consumptionCut: consumption, commissionCut: commission, netAmount: net });
+            setWeekForm(prev => ({ ...prev, rt: 'Pilih RT', gross: '' }));
+            setEditingId(null);
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil dikirim ke Preview!',
+                text: 'Data sudah berhasil dikirim ke dashboard Preview Data.',
+                confirmButtonColor: '#047857'
+            });
         });
     }
   };
@@ -276,12 +284,16 @@ const InputSection: React.FC = () => {
             confirmAction('Simpan Perubahan Draft?', 'Data draft akan diperbarui.', () => { updateDonor(editingId, { date: donorForm.date, name: donorForm.name, nominal: nominal }); cancelEdit(); Swal.fire('Sukses', 'Draft diupdate', 'success'); });
         }
     } else {
-        confirmAction('Simpan Data?', 'Apakah Anda yakin ingin menyimpan data ini langsung ke Google Sheets?', async () => {
-            const success = await addPublishedItem('Donatur_data', { date: donorForm.date, name: donorForm.name, nominal: nominal });
-            if (success) {
-                setDonorForm(prev => ({ ...prev, name: '', nominal: '' }));
-                setEditingId(null);
-            }
+        confirmAction('Simpan Data?', 'Apakah Anda yakin ingin menyimpan data ini?', () => {
+            addDonor({ date: donorForm.date, name: donorForm.name, nominal: nominal });
+            setDonorForm(prev => ({ ...prev, name: '', nominal: '' }));
+            setEditingId(null);
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil dikirim ke Preview!',
+                text: 'Data sudah berhasil dikirim ke dashboard preview Data.',
+                confirmButtonColor: '#047857'
+            });
         });
     }
   };
@@ -300,12 +312,16 @@ const InputSection: React.FC = () => {
             confirmAction('Simpan Perubahan Draft?', 'Data draft akan diperbarui.', () => { updateExpense(editingId, { date: expForm.date, purpose: expForm.purpose, nominal: nominal }); cancelEdit(); Swal.fire('Sukses', 'Draft diupdate', 'success'); });
         }
     } else {
-        confirmAction('Simpan Data?', 'Apakah Anda yakin ingin menyimpan data ini langsung ke Google Sheets?', async () => {
-            const success = await addPublishedItem('Pengeluaran_data', { date: expForm.date, purpose: expForm.purpose, nominal: nominal });
-            if (success) {
-                setExpForm(prev => ({ ...prev, purpose: '', nominal: '' }));
-                setEditingId(null);
-            }
+        confirmAction('Simpan Data?', 'Apakah Anda yakin ingin menyimpan data ini?', () => {
+            addExpense({ date: expForm.date, purpose: expForm.purpose, nominal: nominal });
+            setExpForm(prev => ({ ...prev, purpose: '', nominal: '' }));
+            setEditingId(null);
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil dikirim ke Preview!',
+                text: 'Data sudah berhasil dikirim ke dashboard preview Data.',
+                confirmButtonColor: '#047857'
+            });
         });
     }
   };
