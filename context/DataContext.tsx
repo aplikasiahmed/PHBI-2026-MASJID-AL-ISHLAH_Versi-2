@@ -284,7 +284,7 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
           Swal.fire({
             icon: 'warning',
             title: 'Koneksi Spreadsheet Lambat',
-            text: 'Terjadi kendala saat membaca data lembar kerja terbaru secara langsung. Tapi tenang, data offline sebelumnya dapat diakses.'
+            text: 'Terjadi kendala saat Spreadsheet terbaru secara langsung. Tapi tenang, data offline sebelumnya dapat diakses.'
           });
       } else { 
         if (!hasCache) {
@@ -849,7 +849,7 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
       Swal.fire({
         title: 'Menyimpan Data...',
-        text: 'Mengirim laporan ke Google Sheets',
+        text: 'Mengirim laporan. Mohon Tunggu...',
         allowOutsideClick: false,
         didOpen: () => { Swal.showLoading(); }
       });
@@ -992,7 +992,7 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
           return true;
       } catch (error: any) {
           console.error("Gagal memperbarui item:", error);
-          Swal.fire('Gagal Update', error?.message || 'Terjadi gangguan saat menyimpan ke spreadsheet.', 'error');
+          Swal.fire('Gagal Update', error?.message || 'Terjadi gangguan saat menyimpan....', 'error');
           return false;
       }
   };
@@ -1049,7 +1049,7 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
     Swal.fire({
       title: 'Memproses Data...',
-      text: 'Mengirim draf laporan ke Google Sheets',
+      text: 'Mohon tunggu ....',
       allowOutsideClick: false,
       didOpen: () => { Swal.showLoading(); }
     });
@@ -1146,12 +1146,12 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       Swal.fire({
         icon: 'success',
         title: 'Publikasi Berhasil',
-        text: 'Laporan keuangan pada Google Sheets Anda telah diperbarui dan disinkronkan.',
+        text: 'Laporan keuangan telah diperbarui dan disinkronasi.',
         confirmButtonColor: '#047857'
       });
     } catch (error: any) {
       console.error("Gagal melakukan publikasi laporan:", error);
-      Swal.fire('Gagal Publikasi', error?.message || 'Koneksi lembar kerja bermasalah.', 'error');
+      Swal.fire('Gagal Publikasi', error?.message || 'Koneksi server bermasalah.', 'error');
     }
   };
 
@@ -1174,7 +1174,7 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
 
     Swal.fire({
-      title: 'Mereset Data Spreadsheet...',
+      title: 'Mereset Data server...',
       text: 'Mohon tunggu sebentar',
       allowOutsideClick: false,
       didOpen: () => { Swal.showLoading(); }
@@ -1227,9 +1227,9 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         }
 
         await fetchSpreadsheetData(true); 
-        Swal.fire('Berhasil', 'Data spreadsheet terpilih telah direset.', 'success');
+        Swal.fire('Berhasil', 'Data berhasil dirubah.', 'success');
     } catch (error: any) { 
-      console.error("Gagal melakukan reset:", error);
+      console.error("Gagal melakukan perubahan:", error);
       Swal.fire('Error', 'Gagal mereset: ' + (error?.message || 'Error'), 'error'); 
     }
   };

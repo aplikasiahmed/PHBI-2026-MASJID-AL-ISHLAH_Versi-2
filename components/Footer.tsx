@@ -29,7 +29,7 @@ const Footer: React.FC = () => {
                     <Phone className="w-3 h-3 md:w-4 md:h-4" /> 082123456789 (Panitia)
                 </div>
                 <div className="flex items-center justify-center md:justify-start gap-2">
-                    <Mail className="w-3 h-3 md:w-4 md:h-4" /> masjid.alishlahrw04@gmail.com
+                    <Mail className="w-3 h-3 md:w-4 md:h-4" /> phbimaulidnabi2026@gmail.com
                 </div>
              </div>
           </div>
