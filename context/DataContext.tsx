@@ -617,6 +617,10 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         <div class="text-left text-xs space-y-2 leading-relaxed">
           <p>Untuk melakukan tindakan <strong>${actionDesc}</strong> ke Google Sheets, sistem memerlukan koneksi aman sekali saja.</p>
           <p class="font-semibold text-emerald-700">✓ Nama profil Anda akan tetap mempertahankan nama login asli Anda (<strong>${currentUser || 'Admin'}</strong>).</p>
+          <div class="mt-3 p-2 bg-amber-50 border border-amber-200 rounded text-[11px] text-amber-805 leading-normal">
+            <strong>💡 Bypass Tanpa Akun Google (Rekomendasi):</strong><br/>
+            Jika ingin menginput data tanpa login Google di HP / beda domain (Netlify) agar terbebas dari error otorisasi, silakan hubungkan <strong>URL Google Apps Script</strong> di tab <strong>Kelola Admin</strong> dengan kode server <strong>ALISHLAH2026</strong>.
+          </div>
         </div>
       `,
       showCancelButton: true,

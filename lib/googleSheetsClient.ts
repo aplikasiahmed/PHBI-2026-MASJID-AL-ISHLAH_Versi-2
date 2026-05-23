@@ -99,7 +99,7 @@ export async function fetchSheetCSV(sheetName: string): Promise<string[][]> {
   const gvizUrl = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)}&t=${Date.now()}`;
 
   try {
-    const response = await fetchWithTimeout(gvizUrl, { timeout: 3000 });
+    const response = await fetchWithTimeout(gvizUrl, { timeout: 10000 });
     if (response.ok) {
       const text = await response.text();
       const match = text.match(/google\.visualization\.Query\.setResponse\(([\s\S]*)\);/);
@@ -149,7 +149,7 @@ export async function fetchSheetCSV(sheetName: string): Promise<string[][]> {
   // 2. Fallback to direct CSV export format
   const directCsvUrl = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(sheetName)}&t=${Date.now()}`;
   try {
-    const response = await fetchWithTimeout(directCsvUrl, { timeout: 3500 });
+    const response = await fetchWithTimeout(directCsvUrl, { timeout: 12000 });
     if (response.ok) {
       const text = await response.text();
       const trimmed = text.trim();
@@ -296,6 +296,66 @@ export async function clearSheetAppsScript(appsScriptUrl: string, sheetName: str
 
   if (result && !result.success) {
     throw new Error(result.error || `Apps Script melaporkan kegagalan untuk mereset sheet ${sheetName}`);
+  }
+}
+
+/**
+ * Test connectivity, CORS, and deployment settings of Google Apps Script Web App
+ */
+export async function testAppsScriptConnection(appsScriptUrl: string): Promise<{ success: boolean; message: string; code?: string }> {
+  try {
+    if (!appsScriptUrl || !appsScriptUrl.trim()) {
+      return { success: false, message: 'URL Apps Script kosong!' };
+    }
+    if (!appsScriptUrl.includes('/exec')) {
+      return { success: false, message: 'URL tidak mengandung "/exec". Pastikan Anda menuliskan URL Aplikasi Web yang aktif (bukan URL editor /dev).' };
+    }
+
+    const res = await fetch(appsScriptUrl, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json'
+      }
+    });
+
+    if (!res.ok) {
+      return { 
+        success: false, 
+        message: `Koneksi ditolak oleh server Google. Status HTTP: ${res.status}. Pastikan URL telah disalin dengan lengkap.` 
+      };
+    }
+
+    const text = await res.text();
+    let json;
+    try {
+      json = JSON.parse(text);
+    } catch (e) {
+      if (text.includes('ServiceLogin') || text.includes('google.com/accounts') || text.includes('login')) {
+        return {
+          success: false,
+          code: 'UNAUTHORIZED_ACCESS',
+          message: 'Akses Ditolak / Butuh Login Google. Ini terjadi karena setelan "Siapa saja yang memiliki akses" (Who has access) belum diatur sebagai "Siapa saja" (Anyone) saat "Terapkan baru (Deploy)".Silakan Deploy Ulang.'
+        };
+      }
+      return { 
+        success: false, 
+        message: `Respons dari server bukan format JSON yang valid. Harap periksa apakah kode Apps Script Anda sudah benar.` 
+      };
+    }
+
+    if (json && json.success) {
+      return { success: true, message: json.message || "Koneksi berhasil terjalin!" };
+    } else {
+      return { success: false, message: json.error || "Gagal menyambung ke Apps Script." };
+    }
+
+  } catch (error: any) {
+    console.error("Test Apps Script error:", error);
+    return {
+      success: false,
+      code: 'CORS_OR_NETWORK_ERROR',
+      message: 'Gagal melakukan koneksi aman (CORS / Failed to fetch). HAL INI TERJADI KARENA setelan "Who has access" (Siapa yang memiliki akses) diatur ke "Hanya saya" atau "Hanya yang memiliki akun Google" sehingga diblokir browser. Harap lakukan Terapkan Baru (Deploy) dan ganti setelan ke "Siapa saja" (Anyone).'
+    };
   }
 }
 

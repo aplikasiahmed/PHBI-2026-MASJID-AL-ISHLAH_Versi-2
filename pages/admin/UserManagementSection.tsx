@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useData } from '../../context/DataContext';
 import Swal from 'sweetalert2';
 import { UserPlus, ShieldAlert, Users, Trash2, Lock, Unlock } from 'lucide-react';
-import { SPREADSHEET_ID } from '../../lib/googleSheetsClient';
+import { SPREADSHEET_ID, testAppsScriptConnection } from '../../lib/googleSheetsClient';
 
 const UserManagementSection: React.FC = () => {
   const { addAdminUser, getAdminUsers, deleteAdminUser, appsScriptUrl, setAppsScriptUrl } = useData();
@@ -12,6 +12,7 @@ const UserManagementSection: React.FC = () => {
   const [copied, setCopied] = useState(false);
   const [isUnlocked, setIsUnlocked] = useState(false);
   const [unlockKey, setUnlockKey] = useState('');
+  const [isTesting, setIsTesting] = useState(false);
   const [formData, setFormData] = useState({
     username: '',
     password: '',
@@ -154,13 +155,80 @@ function doGet() {
     }
   };
 
-  const handleSaveScriptUrl = () => {
-    if (!scriptUrlInput.trim()) {
+  const handleSaveScriptUrl = async () => {
+    const trimmedUrl = scriptUrlInput.trim();
+    if (!trimmedUrl) {
       Swal.fire('Info', 'Masukkan Google Apps Script Web App URL yang valid.', 'info');
       return;
     }
-    setAppsScriptUrl(scriptUrlInput.trim());
-    Swal.fire('Berhasil', 'Integrasi Google Apps Script disimpan! Multi-admin otomatis aktif.', 'success');
+    if (!trimmedUrl.includes('/exec')) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Format URL Salah 🛑',
+        html: `
+          <div class="text-left text-xs leading-relaxed space-y-2 text-gray-700">
+            <p>URL Google Apps Script harus mengandung <strong>/exec</strong> di dalamnya.</p>
+            <p>Contoh format yang benar:</p>
+            <code class="block p-1.5 bg-gray-100 rounded text-[11px] font-mono break-all selection:all">https://script.google.com/macros/s/AKfycb.../exec</code>
+            <p class="font-bold text-amber-700 mt-2">💡 Tips:</p>
+            <p>Harap pastikan Anda telah menekan tombol "Terapkan" (Deploy) &rarr; "Penerapan baru" sebagai "Aplikasi Web" di editor Apps Script Anda terlebih dahulu.</p>
+          </div>
+        `
+      });
+      return;
+    }
+
+    setIsTesting(true);
+    Swal.fire({
+      title: 'Menguji Koneksi...',
+      text: 'Sedang memvalidasi setelan Apps Script Anda...',
+      allowOutsideClick: false,
+      didOpen: () => { Swal.showLoading(); }
+    });
+
+    const testResult = await testAppsScriptConnection(trimmedUrl);
+    setIsTesting(false);
+
+    if (testResult.success) {
+      setAppsScriptUrl(trimmedUrl);
+      Swal.fire({
+        icon: 'success',
+        title: 'Koneksi Berhasil! 🟢',
+        text: 'Google Apps Script terhubung dengan lancar! Sekarang Anda bebas menginput & merubah data tanpa perlu login akun Google di HP.',
+        confirmButtonColor: '#10b981',
+      });
+    } else {
+      Swal.fire({
+        icon: 'error',
+        title: 'Koneksi Gagal 🛑',
+        html: `
+          <div class="text-left text-xs space-y-2 leading-relaxed text-gray-700 max-h-[300px] overflow-y-auto">
+            <p class="font-bold text-red-650 bg-red-50 p-2 rounded border border-red-100">${testResult.message}</p>
+            
+            <p class="font-bold border-t pt-2 mt-3 text-gray-800">📋 CARA PALING AMPUH MEMPERBAIKI INI:</p>
+            <ol class="list-decimal list-inside space-y-1 text-gray-600 pl-1">
+              <li>Di halaman editor Google Apps Script Anda, klik tombol <strong>Terapkan (Deploy)</strong> di kanan atas.</li>
+              <li>Pilih <strong>Terapkan Baru (New Deployment)</strong>.</li>
+              <li>Pastikan jenis penerapan adalah <strong>Aplikasi Web</strong> (Web App).</li>
+              <li>Atur <strong>Jalankan sebagai (Execute as)</strong> ke: <strong class="text-gray-900">Saya (email uploader)</strong>.</li>
+              <li>Atur <strong>Siapa yang memiliki akses (Who has access)</strong> ke: <strong class="text-emerald-700 underline font-bold">Siapa saja (Anyone)</strong>.</li>
+              <li>Klik tombol biru <strong>Terapkan (Deploy)</strong>.</li>
+              <li>Salin **URL Aplikasi Web** baru yang diberikan (yang berakhiran <code>/exec</code>) dan masukkan kembali di sini.</li>
+            </ol>
+          </div>
+        `,
+        confirmButtonText: 'Tetap Gunakan URL Ini',
+        showCancelButton: true,
+        cancelButtonText: 'Perbaiki Dulu',
+        confirmButtonColor: '#9ca3af',
+        cancelButtonColor: '#10b981',
+      }).then((sweetResult) => {
+        if (sweetResult.isConfirmed) {
+          setAppsScriptUrl(trimmedUrl);
+          Swal.fire('Disimpan', 'URL disimpan dengan peringatan. Silakan lakukan Deploy Ulang jika input data masih mengalami error.', 'warning');
+        }
+      });
+    }
   };
 
   const handleDisconnectScriptUrl = () => {

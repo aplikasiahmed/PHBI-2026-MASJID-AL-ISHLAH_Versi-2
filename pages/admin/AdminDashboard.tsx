@@ -145,6 +145,27 @@ const AdminDashboard: React.FC = () => {
 
       {/* Main Content Area */}
       <main className="flex-1 container mx-auto p-2 md:p-6 pb-20">
+          {!appsScriptUrl && (
+              <div className="mb-4 bg-amber-50 border border-amber-200 rounded-xl p-3 md:p-4 text-gray-800 text-xs md:text-sm shadow-xs flex gap-3 items-start animate-fade-in">
+                  <div className="bg-amber-100 p-1.5 rounded-lg text-amber-700 font-bold shrink-0">
+                      ⚠️
+                  </div>
+                  <div className="flex-1 space-y-1">
+                      <p className="font-bold text-amber-900 leading-tight">Bypass Multi-Device Belum Aktif di Perangkat / Domain Ini!</p>
+                      <p className="text-gray-600 leading-relaxed text-[11px] md:text-xs">
+                          Karena Anda baru saja bermigrasi ke domain <strong>Netlify</strong> atau login dari HP baru, pengaturan URL Google Apps Script Anda saat ini kosong di perangkat/browser ini. 
+                          Agar proses menambahkan, merubah, dan menghapus laporan keuangan berjalan otomatis <strong>tanpa perlu memiliki/masuk ke akun Google (bebas dari error otorisasi)</strong>, mari hubungkan kembali URL Apps Script Anda.
+                      </p>
+                      <button 
+                         onClick={() => setActivePage('users')}
+                         className="mt-1.5 bg-amber-600 hover:bg-amber-700 text-white font-bold px-3 py-1.5 rounded-lg text-[10px] md:text-xs transition active:scale-95 cursor-pointer flex items-center gap-1.5"
+                      >
+                         <span>🔧 Hubungkan Lagi Apps Script</span>
+                      </button>
+                  </div>
+              </div>
+          )}
+
          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-3 md:p-8 min-h-[500px]">
              {activePage === 'input' && <InputSection />}
              {activePage === 'preview' && <PreviewSection />}
