@@ -15,8 +15,8 @@ const PublicHome: React.FC = () => {
   const hasSetInitialWeek = useRef(false);
 
   // URL Assets
-  const bcaLogoUrl = "https://bmcenhkcwuxnclmlcriy.supabase.co/storage/v1/object/sign/image/BCA%20icon.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9iODZjZjM2NS1mNTBmLTQwMmQtYjUwMC00Mjg3YjVlYTgxYzkiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJpbWFnZS9CQ0EgaWNvbi5wbmciLCJpYXQiOjE3Njg1NDg3NjUsImV4cCI6MTgwMDA4NDc2NX0.D0kVRrFXun72PZeP3Uxvdk-uwC3IjiL5eH30JstwMrY";
-  const waLogoUrl = "https://bmcenhkcwuxnclmlcriy.supabase.co/storage/v1/object/sign/image/WhatsApp_icon.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9iODZjZjM2NS1mNTBmLTQwMmQtYjUwMC00Mjg3YjVlYTgxYzkiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJpbWFnZS9XaGF0c0FwcF9pY29uLnBuZyIsImlhdCI6MTc2ODU0ODQ4NywiZXhwIjoxODAwMDg0NDg3fQ.7Jb2tyrgNr5wSEX1yz-ByWL3RMQqdlQk0-kqUlc1B6I";
+  const bcaLogoUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Bank_Central_Asia.svg/1280px-Bank_Central_Asia.svg.png";
+  const waLogoUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/1280px-WhatsApp.svg.png";
 
   // --- SORTING HELPERS (Tanggal Kecil di Atas) ---
   const sortByDateAsc = (a: any, b: any) => new Date(a.date).getTime() - new Date(b.date).getTime();
@@ -159,7 +159,7 @@ const PublicHome: React.FC = () => {
       {/* TITLE SECTION */}
       <div className="bg-white py-6 md:py-12 px-4 text-center border-b border-gray-200 shadow-sm relative overflow-hidden">
         <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-primary via-gold to-primary"></div>
-        <h2 className="text-xl md:text-4xl font-serif font-bold text-primary mb-1 md:mb-3 drop-shadow-sm">LAPORAN KEUANGAN PHBI</h2>
+        <h2 className="text-xl md:text-4xl font-serif font-bold text-primary mb-1 md:mb-3 drop-shadow-sm">SISTEM KEUANGAN PHBI</h2>
         <p className="text-xs md:text-xl text-secondary font-medium tracking-wide">Maulid Nabi Muhammad SAW 1448 H | 2026 M</p>
       </div>
 
