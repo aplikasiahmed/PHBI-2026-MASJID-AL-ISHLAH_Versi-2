@@ -647,7 +647,7 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       icon: 'info',
       title: 'Anda Belum terhubung ke server',
       html: `
-        <div class="text-left text-xs space-y-2 leading-relaxed">
+        <div class="text-center text-xs space-y-2 leading-relaxed">
           <p>Data yang anda input belum tersimpan ke server untuk <strong>${actionDesc}</strong>.</p>
           <p class="font-semibold text-emerald-700">✓ Hubungi pemilik server.</p>
         </div>
