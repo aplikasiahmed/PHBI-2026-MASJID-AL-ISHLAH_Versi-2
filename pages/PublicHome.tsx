@@ -586,7 +586,7 @@ const PublicHome: React.FC = () => {
                     <p className="text-[11px] md:text-sm text-gray-500 pb-2">dapat donasikan melalui transfer Bank</p>
                     
                     <div className="bg-blue-50 border border-blue-200 p-3 md:p-4 rounded-xl flex items-center gap-3 shadow-sm w-full md:w-auto justify-center md:justify-start">
-                        <img src={bcaLogoUrl} alt="BCA" className="h-12 md:h-16 object-contain" />
+                        <img src={bcaLogoUrl} alt="BCA" className="h-6 md:h-8 object-contain" />
                         <div>
                             <p className="text-[9px] md:text-[10px] uppercase text-gray-500 font-bold tracking-wider">Bank Central Asia (BCA)</p>
                             <p className="text-base md:text-3xl font-mono font-bold text-gray-800 tracking-wider">7296012717</p>
