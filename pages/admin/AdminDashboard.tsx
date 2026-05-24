@@ -73,14 +73,14 @@ const AdminDashboard: React.FC = () => {
                        <button
                          onClick={googleLogin}
                          className="flex items-center gap-1 bg-amber-500 hover:bg-amber-600 text-white px-2 py-1 md:px-3 md:py-1.5 rounded-full text-[9px] md:text-xs font-bold transition shadow-sm active:scale-95 animate-pulse"
-                         title="Silakan hubungkan akun Google untuk menulis data"
+                         title="Silakan hubungkan server untuk menulis input data"
                        >
-                         <span>Sambungkan Google</span>
+                         <span>Sambungkan Server</span>
                        </button>
                      ) : (
                        <div className="flex items-center gap-1 bg-emerald-50 px-2.5 py-1 md:px-3 md:py-1.5 rounded-full border border-emerald-100">
                          <span className="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                         <span className="text-[8px] md:text-[9px] font-bold text-emerald-800 uppercase hidden md:inline">Google Terhubung</span>
+                         <span className="text-[8px] md:text-[9px] font-bold text-emerald-800 uppercase hidden md:inline">Server Terhubung</span>
                          <span className="text-[8px] md:text-[9px] font-bold text-emerald-800 uppercase md:hidden">Sheets</span>
                        </div>
                      )}
@@ -151,10 +151,9 @@ const AdminDashboard: React.FC = () => {
                       ⚠️
                   </div>
                   <div className="flex-1 space-y-1">
-                      <p className="font-bold text-amber-900 leading-tight">Bypass Multi-Device Belum Aktif di Perangkat / Domain Ini!</p>
+                      <p className="font-bold text-amber-900 leading-tight">Bypass Multi Device Belum Aktif di Perangkat ini!</p>
                       <p className="text-gray-600 leading-relaxed text-[11px] md:text-xs">
-                          Karena Anda baru saja bermigrasi ke domain <strong>Netlify</strong> atau login dari HP baru, pengaturan URL Google Apps Script Anda saat ini kosong di perangkat/browser ini. 
-                          Agar proses menambahkan, merubah, dan menghapus laporan keuangan berjalan otomatis <strong>tanpa perlu memiliki/masuk ke akun Google (bebas dari error otorisasi)</strong>, mari hubungkan kembali URL Apps Script Anda.
+                          mari hubungkan kembali URL Apps Script Anda.
                       </p>
                       <button 
                          onClick={() => setActivePage('users')}
