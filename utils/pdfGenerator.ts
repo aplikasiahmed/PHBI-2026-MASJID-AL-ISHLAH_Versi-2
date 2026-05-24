@@ -437,15 +437,13 @@ export const generatePDF = async (data: AppData, type: 'weekly' | 'donor' | 'exp
         doc.text(`Tangerang, ${dateStr}`, col3, sigY - 8, { align: 'center' });
 
         // Row 1 Title
-        doc.text("Wakil Ketua,", col1, sigY, { align: 'center' });
-        doc.text("Sekertaris,", col2, sigY, { align: 'center' });
+        doc.text("Ketua Panitia,", col1, sigY, { align: 'center' });
         doc.text("Bendahara,", col3, sigY, { align: 'center' });
 
         // Row 1 Name
         sigY += 22;
         doc.setFont("helvetica", "bold");
         doc.text("AHMAD FARHAN", col1, sigY, { align: 'center' });
-        doc.text("AHMAD NAWASYI", col2, sigY, { align: 'center' });
         doc.text("MAHENDRA", col3, sigY, { align: 'center' });
         
 
