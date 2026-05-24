@@ -4,7 +4,7 @@ import { AppData } from '../types';
 import { formatCurrency, formatDate, formatDateTime } from './format';
 
 // Link Logo Baru
-const LOGO_URL = "https://bmcenhkcwuxnclmlcriy.supabase.co/storage/v1/object/sign/image/logo%20phbi%20png.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9iODZjZjM2NS1mNTBmLTQwMmQtYjUwMC00Mjg3YjVlYTgxYzkiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJpbWFnZS9sb2dvIHBoYmkgcG5nLnBuZyIsImlhdCI6MTc2ODU1OTQxNywiZXhwIjoxODAwMDk1NDE3fQ.njyWJkqHScwEEVDgYKwdbOVpJ6Cr4fZQWAxU_L51_FY";
+const LOGO_URL = "https://lh3.googleusercontent.com/d/11_UugZNJrRxFjNSqMdUS-ENz5Sjg-eCl";
 
 // Helper: Fungsi Terbilang (Angka ke Kata)
 const terbilang = (nilai: number): string => {

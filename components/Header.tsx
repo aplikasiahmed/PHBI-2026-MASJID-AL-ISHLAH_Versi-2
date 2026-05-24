@@ -6,7 +6,7 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ onLoginClick }) => {
-  const logoUrl = "https://bmcenhkcwuxnclmlcriy.supabase.co/storage/v1/object/sign/image/logo%20phbi%20png.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9iODZjZjM2NS1mNTBmLTQwMmQtYjUwMC00Mjg3YjVlYTgxYzkiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJpbWFnZS9sb2dvIHBoYmkgcG5nLnBuZyIsImlhdCI6MTc2ODU0Njc3MCwiZXhwIjoxODAwMDgyNzcwfQ.B-7Ct_J6FK9J5EWEtKqiMCTfS2u6pChn0loK2ZEd6F8";
+  const logoUrl = "https://lh3.googleusercontent.com/d/11_UugZNJrRxFjNSqMdUS-ENz5Sjg-eCl";
 
   return (
     <header className="sticky top-0 z-50 bg-primary text-white shadow-lg border-b-4 border-gold">
