@@ -645,19 +645,15 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     
     const result = await Swal.fire({
       icon: 'info',
-      title: 'Butuh Otorisasi Google Sheets',
+      title: 'Anda Belum terhubung ke server',
       html: `
         <div class="text-left text-xs space-y-2 leading-relaxed">
-          <p>Untuk melakukan tindakan <strong>${actionDesc}</strong> ke Google Sheets, sistem memerlukan koneksi aman sekali saja.</p>
-          <p class="font-semibold text-emerald-700">✓ Nama profil Anda akan tetap mempertahankan nama login asli Anda (<strong>${currentUser || 'Admin'}</strong>).</p>
-          <div class="mt-3 p-2 bg-amber-50 border border-amber-200 rounded text-[11px] text-amber-850 leading-normal">
-            <strong>💡 Bypass Tanpa Akun Google (Rekomendasi):</strong><br/>
-            Jika ingin menginput data tanpa login Google di HP / beda domain (Netlify) agar terbebas dari error otorisasi, silakan hubungkan <strong>URL Google Apps Script</strong> di tab <strong>Kelola Admin</strong> dengan kode server <strong>ALISHLAH2026</strong>.
-          </div>
+          <p>Data yang anda input belum tersimpan ke server untuk <strong>${actionDesc}</strong>.</p>
+          <p class="font-semibold text-emerald-700">✓ Hubungi pemilik server.</p>
         </div>
       `,
       showCancelButton: true,
-      confirmButtonText: 'SINKRONKAN GOOGLE',
+      confirmButtonText: 'SAMBUNGKAN SERVER',
       cancelButtonText: 'Batal',
       confirmButtonColor: '#059669',
       cancelButtonColor: '#d33'
