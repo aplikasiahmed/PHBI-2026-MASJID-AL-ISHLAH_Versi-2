@@ -649,7 +649,7 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       html: `
         <div class="text-center text-xs space-y-2 leading-relaxed">
           <p>Data yang anda input belum tersimpan ke server untuk <strong>${actionDesc}</strong>.</p>
-          <p class="font-semibold text-emerald-700">✓ Hubungi pemilik server.</p>
+          <p class="font-semibold text-red-400">✓ Hubungi pemilik server.</p>
         </div>
       `,
       showCancelButton: true,
