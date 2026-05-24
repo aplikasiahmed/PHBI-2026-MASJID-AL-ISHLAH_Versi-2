@@ -66,7 +66,7 @@ const AdminDashboard: React.FC = () => {
                      {appsScriptUrl ? (
                        <div className="flex items-center gap-1 bg-emerald-50 px-2.5 py-1 md:px-3 md:py-1.5 rounded-full border border-emerald-200 shadow-sm">
                          <span className="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                         <span className="text-[8px] md:text-[9px] font-bold text-emerald-800 uppercase hidden md:inline">Otomatis Terhubung</span>
+                         <span className="text-[8px] md:text-[9px] font-bold text-emerald-800 uppercase hidden md:inline">Server Terhubung</span>
                          <span className="text-[8px] md:text-[9px] font-bold text-emerald-800 uppercase md:hidden">Otomatis</span>
                        </div>
                      ) : !accessToken ? (
@@ -151,15 +151,15 @@ const AdminDashboard: React.FC = () => {
                       ⚠️
                   </div>
                   <div className="flex-1 space-y-1">
-                      <p className="font-bold text-amber-900 leading-tight">Bypass Multi Device Belum Aktif di Perangkat ini!</p>
+                      <p className="font-bold text-amber-900 leading-tight">Server belum terhubung di perangkat anda!</p>
                       <p className="text-gray-600 leading-relaxed text-[11px] md:text-xs">
-                          mari hubungkan kembali URL Apps Script Anda.
+                          Mari hubungkan kembali server untuk input data.
                       </p>
                       <button 
                          onClick={() => setActivePage('users')}
                          className="mt-1.5 bg-amber-600 hover:bg-amber-700 text-white font-bold px-3 py-1.5 rounded-lg text-[10px] md:text-xs transition active:scale-95 cursor-pointer flex items-center gap-1.5"
                       >
-                         <span>🔧 Hubungkan Lagi Apps Script</span>
+                         <span>🔧 Hubungkan Lagi server</span>
                       </button>
                   </div>
               </div>

@@ -362,11 +362,11 @@ function doGet() {
             <div className="flex items-center gap-2 mb-3">
                 <Lock className="text-amber-600 w-5 h-5 md:w-6 md:h-6 animate-pulse" />
                 <h3 className="font-bold text-xs md:text-lg text-amber-850">
-                     🔗 Google Apps Script Integration (Terkunci)
+                     🔗 Integration Apps Server (Terkunci)
                 </h3>
             </div>
             <p className="text-[10px] md:text-sm text-gray-600 mb-4 leading-relaxed">
-                Kartu konfigurasi ini dilindungi oleh otorisasi keamanan sistem. Hanya <strong>Admin Utama / Pemilik Spreadsheet</strong> yang memiliki Kode Keamanan Server yang dapat membuka, melihat instruksi, serta merubah integrasi Google Sheets ini.
+                Hanya <strong>Admin Utama / Pemilik Spreadsheet</strong> yang dapat membuka.
             </p>
             <div className="bg-white border border-amber-200 p-3 rounded-lg max-w-md">
                 <label className="block text-[10px] md:text-xs font-bold text-amber-700 mb-1.5">
@@ -394,7 +394,7 @@ function doGet() {
         <div className="bg-white border text-gray-800 p-3 md:p-6 rounded-lg shadow-sm border-emerald-100 bg-emerald-50/10 transition-all duration-300">
             <div className="flex items-center justify-between mb-2 pb-2 border-b border-gray-100">
                 <h3 className="font-bold text-xs md:text-lg text-emerald-800 flex items-center gap-1.5 md:gap-2">
-                     🔗 Google Apps Script Integration (Multi-Device Bypass)
+                     🔗 Integration Apps Server (Terkunci)
                 </h3>
                 <button
                   onClick={() => setIsUnlocked(false)}
@@ -529,7 +529,7 @@ function doGet() {
                     </div>
                 ) : (
                     <div className="text-[10px] md:text-xs text-gray-400">
-                        *Belum terhubung. Silakan masukkan URL jika ingin menggunakan mode bypass tanpa Otorisasi Google.
+                        *Belum terhubung. Silakan hubungkan Apps Server.
                     </div>
                 )}
             </div>

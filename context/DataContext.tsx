@@ -420,11 +420,11 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
       let errorMsg = err.message || "Pastikan Anda memilih akun Google yang sah.";
       if (err.message?.includes('403') || err.message?.includes('permission')) {
-        errorMsg = "Akun Google Anda tidak memiliki hak akses edit (Editor) di Google Spreadsheet ini. Mohon bagikan akses Edit ke email Google Anda telebih dahulu.";
+        errorMsg = "Anda tidak memiliki hak terhubung ke server. Mohon periksa kembali!.";
       }
       Swal.fire({
         icon: 'error',
-        title: 'Otorisasi Gagal',
+        title: 'Gagal Terhubung Ke Server',
         text: errorMsg
       });
       return undefined;
