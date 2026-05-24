@@ -366,7 +366,7 @@ function doGet() {
                 </h3>
             </div>
             <p className="text-[10px] md:text-sm text-gray-600 mb-4 leading-relaxed">
-                Hanya <strong>Admin Utama / Pemilik Spreadsheet</strong> yang dapat membuka.
+                Hanya <strong>Pemilik Server</strong> yang dapat membuka.
             </p>
             <div className="bg-white border border-amber-200 p-3 rounded-lg max-w-md">
                 <label className="block text-[10px] md:text-xs font-bold text-amber-700 mb-1.5">
