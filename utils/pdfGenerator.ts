@@ -653,7 +653,7 @@ export const generatePDF = async (data: AppData, type: 'weekly' | 'donor' | 'exp
                 [{ content: ' Total Pemasukan Bersih Mingguan (Per RT)', styles: { textColor: [0, 0, 0], fontSize: 9 } }, { content: formatCurrency(totalWeekly), styles: { fontStyle: 'bold', fontSize: 9, halign: 'right' } }],
                 [{ content: ' Total Pemasukan Proposal / Amplop', styles: { textColor: [0, 0, 0], fontSize: 9 } }, { content: formatCurrency(totalDonor), styles: { fontStyle: 'bold', fontSize: 9, halign: 'right' } }],
                 [{ content: ' TOTAL SEMUA PEMASUKAN', styles: { fontStyle: 'bold', textColor: [6, 78, 59], fontSize: 10 } }, { content: formatCurrency(totalIncome), styles: { fontStyle: 'bold', fontSize: 10, textColor: [6, 78, 59], halign: 'right' } }],
-                [{ content: ' TOTAL PENGELUARAN', styles: { fontStyle: 'bold', textColor: [185, 28, 28], fontSize: 10 } }, { content: formatCurrency(totalExpense), styles: { fontStyle: 'bold', fontSize: 10, textColor: [185, 28, 28], halign: 'right' } }],
+                [{ content: ' TOTAL SEMUA PENGELUARAN', styles: { fontStyle: 'bold', textColor: [185, 28, 28], fontSize: 10 } }, { content: formatCurrency(totalExpense), styles: { fontStyle: 'bold', fontSize: 10, textColor: [185, 28, 28], halign: 'right' } }],
                 [{ content: '', styles: { fillColor: [255, 200, 100] } }, { content: formatCurrency(balance), styles: { fontStyle: 'bold', fontSize: 10, textColor: [30, 64, 175], halign: 'right', fillColor: [255, 200, 100] } }]
             ],
             theme: 'grid',
