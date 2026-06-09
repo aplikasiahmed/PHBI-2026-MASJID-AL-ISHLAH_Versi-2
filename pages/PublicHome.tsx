@@ -129,7 +129,7 @@ const PublicHome: React.FC = () => {
 
   const handleDownloadReport = () => {
     Swal.fire({
-      title: 'Downlaod Laporan?',
+      title: 'Download Laporan?',
       text: "Anda akan mendownloand Laporan Keuangan PHBI",
       icon: 'info',
       showCancelButton: true,
