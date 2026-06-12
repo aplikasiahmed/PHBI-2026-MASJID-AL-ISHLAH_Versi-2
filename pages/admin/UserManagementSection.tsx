@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useData } from '../../context/DataContext';
 import Swal from 'sweetalert2';
-import { UserPlus, ShieldAlert, Users, Trash2, Lock, Unlock } from 'lucide-react';
+import { UserPlus, ShieldAlert, Users, Trash2, Lock, Unlock, Eye, EyeOff } from 'lucide-react';
 import { SPREADSHEET_ID, testAppsScriptConnection } from '../../lib/googleSheetsClient';
 
 const UserManagementSection: React.FC = () => {
@@ -13,6 +13,7 @@ const UserManagementSection: React.FC = () => {
   const [isUnlocked, setIsUnlocked] = useState(false);
   const [unlockKey, setUnlockKey] = useState('');
   const [isTesting, setIsTesting] = useState(false);
+  const [showUnlockKey, setShowUnlockKey] = useState(false);
   const [formData, setFormData] = useState({
     username: '',
     password: '',
@@ -111,16 +112,61 @@ function doGet() {
   const handleDelete = async (id: string, username: string) => {
       const { value: masterPass } = await Swal.fire({
           title: 'Hapus Admin?',
-          text: `Hapus user: ${username}`,
-          input: 'password',
-          inputPlaceholder: 'Masukkan Kode ID Server',
+          html: `
+              <p class="mb-3 text-sm text-gray-600">Hapus user: <strong>${username}</strong></p>
+              <div class="relative w-full max-w-xs mx-auto" style="display: block;">
+                  <input 
+                      type="password" 
+                      id="swal-custom-password" 
+                      class="swal2-input" 
+                      placeholder="Masukkan Kode ID Server" 
+                      style="display: block; width: 100%; box-sizing: border-box; margin: 10px auto; padding-right: 40px;"
+                  />
+                  <button 
+                      type="button" 
+                      id="swal-toggle-password" 
+                      style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); border: none; background: none; cursor: pointer; padding: 4px; display: flex; align-items: center; justify-content: center; z-index: 10; color: #6b7280;"
+                      title="Intip Password"
+                  >
+                      <svg id="eye-open-icon" style="display: none;" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0z"/><circle cx="12" cy="12" r="3"/></svg>
+                      <svg id="eye-closed-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.52 13.52 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/><line x1="2" y1="2" x2="22" y2="22"/></svg>
+                  </button>
+              </div>
+          `,
           showCancelButton: true,
           confirmButtonColor: '#d33',
           confirmButtonText: 'Hapus',
           cancelButtonText: 'Batal',
           customClass: {
-            title: 'text-lg',
-            input: 'text-sm'
+            title: 'text-lg'
+          },
+          didOpen: () => {
+              const toggleBtn = document.getElementById('swal-toggle-password');
+              const passwordInput = document.getElementById('swal-custom-password') as HTMLInputElement;
+              const eyeOpen = document.getElementById('eye-open-icon');
+              const eyeClosed = document.getElementById('eye-closed-icon');
+              
+              if (toggleBtn && passwordInput && eyeOpen && eyeClosed) {
+                  toggleBtn.addEventListener('click', () => {
+                      const isPassword = passwordInput.getAttribute('type') === 'password';
+                      passwordInput.setAttribute('type', isPassword ? 'text' : 'password');
+                      if (isPassword) {
+                          eyeOpen.style.display = 'block';
+                          eyeClosed.style.display = 'none';
+                      } else {
+                          eyeOpen.style.display = 'none';
+                          eyeClosed.style.display = 'block';
+                      }
+                  });
+              }
+          },
+          preConfirm: () => {
+              const password = (document.getElementById('swal-custom-password') as HTMLInputElement).value;
+              if (!password) {
+                  Swal.showValidationMessage('Kode ID Server wajib diisi!');
+                  return false;
+              }
+              return password;
           }
       });
 
@@ -372,15 +418,25 @@ function doGet() {
                 <label className="block text-[10px] md:text-xs font-bold text-amber-700 mb-1.5">
                      Masukkan Kode Keamanan Server
                 </label>
-                <div className="flex gap-2">
-                    <input 
-                      type="password"
-                      value={unlockKey}
-                      onChange={e => setUnlockKey(e.target.value)}
-                      onKeyDown={e => { if (e.key === 'Enter') handleUnlock(); }}
-                      className={`${inputClass} border-amber-200 focus:ring-amber-500`}
-                      placeholder="Masukkan Token ID Server..."
-                    />
+                <div className="flex gap-2 items-center">
+                    <div className="relative flex-1">
+                        <input 
+                          type={showUnlockKey ? "text" : "password"}
+                          value={unlockKey}
+                          onChange={e => setUnlockKey(e.target.value)}
+                          onKeyDown={e => { if (e.key === 'Enter') handleUnlock(); }}
+                          className={`${inputClass} border-amber-200 focus:ring-amber-500 pr-10 w-full`}
+                          placeholder="Masukkan Token ID Server..."
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowUnlockKey(!showUnlockKey)}
+                          className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 focus:outline-none"
+                          title="Peep Token"
+                        >
+                          {showUnlockKey ? <EyeOff size={16} /> : <Eye size={16} />}
+                        </button>
+                    </div>
                     <button
                       onClick={handleUnlock}
                       className="bg-amber-600 hover:bg-amber-750 text-white font-bold px-4 py-1.5 md:px-5 md:py-2 rounded-lg text-xs md:text-sm transition shadow-sm active:scale-95 cursor-pointer whitespace-nowrap"

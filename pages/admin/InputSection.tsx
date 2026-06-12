@@ -133,18 +133,62 @@ const InputSection: React.FC = () => {
             title: 'Hapus dari Database?',
             html: `
                 <p class="mb-3 text-sm text-gray-600">Data ini sudah dipublikasikan. Menghapusnya akan langsung hilang dari website publik.</p>
-                <div class="text-left bg-red-50 p-2 rounded border border-red-100 text-red-800 text-xs font-bold mb-2 flex items-center gap-2">
+                <div class="text-left bg-red-50 p-2 rounded border border-red-100 text-red-800 text-xs font-bold mb-3 flex items-center gap-2">
                      🔐 Masukkan Kode ID Server
+                </div>
+                <div class="relative w-full max-w-xs mx-auto" style="display: block;">
+                    <input 
+                        type="password" 
+                        id="swal-custom-password" 
+                        class="swal2-input" 
+                        placeholder="Kode ID Server..." 
+                        style="display: block; width: 100%; box-sizing: border-box; margin: 10px auto; padding-right: 40px;"
+                    />
+                    <button 
+                        type="button" 
+                        id="swal-toggle-password" 
+                        style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); border: none; background: none; cursor: pointer; padding: 4px; display: flex; align-items: center; justify-content: center; z-index: 10; color: #6b7280;"
+                        title="Intip Password"
+                    >
+                        <svg id="eye-open-icon" style="display: none;" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0z"/><circle cx="12" cy="12" r="3"/></svg>
+                        <svg id="eye-closed-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.52 13.52 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/><line x1="2" y1="2" x2="22" y2="22"/></svg>
+                    </button>
                 </div>
             `,
             icon: 'warning',
-            input: 'password',
-            inputPlaceholder: 'Kode ID Server...',
             showCancelButton: true,
             confirmButtonColor: '#3085d6', 
             cancelButtonColor: '#ff0000',
             confirmButtonText: 'Ya, Hapus Data',
-            cancelButtonText: 'Batal'
+            cancelButtonText: 'Batal',
+            didOpen: () => {
+                const toggleBtn = document.getElementById('swal-toggle-password');
+                const passwordInput = document.getElementById('swal-custom-password') as HTMLInputElement;
+                const eyeOpen = document.getElementById('eye-open-icon');
+                const eyeClosed = document.getElementById('eye-closed-icon');
+                
+                if (toggleBtn && passwordInput && eyeOpen && eyeClosed) {
+                    toggleBtn.addEventListener('click', () => {
+                        const isPassword = passwordInput.getAttribute('type') === 'password';
+                        passwordInput.setAttribute('type', isPassword ? 'text' : 'password');
+                        if (isPassword) {
+                            eyeOpen.style.display = 'block';
+                            eyeClosed.style.display = 'none';
+                        } else {
+                            eyeOpen.style.display = 'none';
+                            eyeClosed.style.display = 'block';
+                        }
+                    });
+                }
+            },
+            preConfirm: () => {
+                const password = (document.getElementById('swal-custom-password') as HTMLInputElement).value;
+                if (!password) {
+                    Swal.showValidationMessage('Kode ID Server wajib diisi!');
+                    return false;
+                }
+                return password;
+            }
         }).then(async (result) => {
             if (result.isConfirmed) {
                 if (result.value === AUTH_CODE) {
@@ -172,18 +216,62 @@ const InputSection: React.FC = () => {
           title: 'Update Database?',
           html: `
             <p class="mb-3 text-sm text-gray-600">Yakin data akan di rubah ? Perubahan akan langsung terlihat publik.</p>
-            <div class="text-left bg-orange-50 p-2 rounded border border-orange-100 text-orange-800 text-xs font-bold mb-2 flex items-center gap-2">
+            <div class="text-left bg-orange-50 p-2 rounded border border-orange-100 text-orange-800 text-xs font-bold mb-3 flex items-center gap-2">
                  🔐 Masukkan Kode ID Server
+            </div>
+            <div class="relative w-full max-w-xs mx-auto" style="display: block;">
+                <input 
+                    type="password" 
+                    id="swal-custom-password" 
+                    class="swal2-input" 
+                    placeholder="Kode ID Server..." 
+                    style="display: block; width: 100%; box-sizing: border-box; margin: 10px auto; padding-right: 40px;"
+                />
+                <button 
+                    type="button" 
+                    id="swal-toggle-password" 
+                    style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); border: none; background: none; cursor: pointer; padding: 4px; display: flex; align-items: center; justify-content: center; z-index: 10; color: #6b7280;"
+                    title="Intip Password"
+                >
+                    <svg id="eye-open-icon" style="display: none;" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0z"/><circle cx="12" cy="12" r="3"/></svg>
+                    <svg id="eye-closed-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.52 13.52 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/><line x1="2" y1="2" x2="22" y2="22"/></svg>
+                </button>
             </div>
           `,
           icon: 'warning',
-          input: 'password',
-          inputPlaceholder: 'Kode ID Server...',
           showCancelButton: true,
           confirmButtonColor: '#047857',
           cancelButtonColor: '#d33',
           confirmButtonText: 'Ya, Update Data',
-          cancelButtonText: 'Batal'
+          cancelButtonText: 'Batal',
+          didOpen: () => {
+              const toggleBtn = document.getElementById('swal-toggle-password');
+              const passwordInput = document.getElementById('swal-custom-password') as HTMLInputElement;
+              const eyeOpen = document.getElementById('eye-open-icon');
+              const eyeClosed = document.getElementById('eye-closed-icon');
+              
+              if (toggleBtn && passwordInput && eyeOpen && eyeClosed) {
+                  toggleBtn.addEventListener('click', () => {
+                      const isPassword = passwordInput.getAttribute('type') === 'password';
+                      passwordInput.setAttribute('type', isPassword ? 'text' : 'password');
+                      if (isPassword) {
+                          eyeOpen.style.display = 'block';
+                          eyeClosed.style.display = 'none';
+                      } else {
+                          eyeOpen.style.display = 'none';
+                          eyeClosed.style.display = 'block';
+                      }
+                  });
+              }
+          },
+          preConfirm: () => {
+              const password = (document.getElementById('swal-custom-password') as HTMLInputElement).value;
+              if (!password) {
+                  Swal.showValidationMessage('Kode ID Server wajib diisi!');
+                  return false;
+              }
+              return password;
+          }
       }).then((result) => {
           if (result.isConfirmed) {
               if (result.value === AUTH_CODE) {
