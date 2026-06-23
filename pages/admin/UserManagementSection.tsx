@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useData } from '../../context/DataContext';
 import Swal from 'sweetalert2';
-import { UserPlus, ShieldAlert, Users, Trash2, Lock, Unlock, Eye, EyeOff } from 'lucide-react';
+import { UserPlus, ShieldAlert, Users, Trash2, Lock, Unlock, Eye, EyeOff, Clock, Laptop, Smartphone, Tablet, Globe, RefreshCw, BarChart3 } from 'lucide-react';
 import { SPREADSHEET_ID, testAppsScriptConnection } from '../../lib/googleSheetsClient';
+import { getAnalyticsData, AnalyticsData } from '../../utils/analytics';
 
 const UserManagementSection: React.FC = () => {
   const { addAdminUser, getAdminUsers, deleteAdminUser, appsScriptUrl, setAppsScriptUrl } = useData();
@@ -14,6 +15,7 @@ const UserManagementSection: React.FC = () => {
   const [unlockKey, setUnlockKey] = useState('');
   const [isTesting, setIsTesting] = useState(false);
   const [showUnlockKey, setShowUnlockKey] = useState(false);
+  const [analytics, setAnalytics] = useState<AnalyticsData | null>(null);
   const [formData, setFormData] = useState({
     username: '',
     password: '',
@@ -28,6 +30,7 @@ const UserManagementSection: React.FC = () => {
 
   useEffect(() => {
     loadUsers();
+    setAnalytics(getAnalyticsData());
   }, []);
 
   const handleCopyScript = () => {
@@ -589,6 +592,222 @@ function doGet() {
                     </div>
                 )}
             </div>
+        </div>
+      )}
+
+      {/* KARTU STATISTIK KUNJUNGAN WEBSITE */}
+      {analytics && (
+        <div className="bg-white border border-gray-200 p-4 md:p-6 rounded-lg shadow-sm mt-4 md:mt-6 transition-all duration-300">
+          <div className="flex items-center justify-between mb-4 pb-2 border-b border-gray-100">
+            <div className="flex items-center gap-2">
+              <BarChart3 className="text-primary w-5 h-5 md:w-6 md:h-6" />
+              <div>
+                <h3 className="font-bold text-xs md:text-lg text-gray-800 leading-none">
+                  Statistik Kunjungan Website PHBI
+                </h3>
+                <p className="text-[9px] md:text-xs text-gray-400 mt-1">
+                  Menampilkan aktivitas kunjungan jamaah/donatur secara real-time
+                </p>
+              </div>
+            </div>
+            <button
+              onClick={() => {
+                setAnalytics(getAnalyticsData());
+                Swal.fire({
+                  icon: 'success',
+                  title: 'Sinkronisasi Berhasil',
+                  text: 'Data statistik kunjungan telah disegarkan!',
+                  timer: 1000,
+                  showConfirmButton: false
+                });
+              }}
+              className="text-gray-500 hover:text-primary transition p-1.5 hover:bg-gray-50 rounded-full border border-gray-200 shadow-xs"
+              title="Segarkan Data"
+            >
+              <RefreshCw size={14} />
+            </button>
+          </div>
+
+          {/* Grid Overview (3 Kartu Kecil) */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            {/* Total Pageviews */}
+            <div className="bg-emerald-50/45 border border-emerald-100/70 p-3 rounded-xl flex items-center gap-3">
+              <div className="bg-emerald-100/60 p-2 rounded-lg text-emerald-800">
+                <Eye size={18} className="md:w-5 md:h-5" />
+              </div>
+              <div>
+                <p className="text-[10px] text-gray-400 leading-none">Total Kunjungan</p>
+                <p className="text-sm md:text-xl font-extrabold text-emerald-950 mt-1">
+                  {analytics.totalPageViews.toLocaleString('id-ID')}
+                </p>
+                <span className="text-[8px] text-emerald-700 font-medium">Kali halaman diakses</span>
+              </div>
+            </div>
+
+            {/* Unique Visitors */}
+            <div className="bg-blue-50/45 border border-blue-100/70 p-3 rounded-xl flex items-center gap-3">
+              <div className="bg-blue-100/60 p-2 rounded-lg text-blue-800">
+                <Users size={18} className="md:w-5 md:h-5" />
+              </div>
+              <div>
+                <p className="text-[10px] text-gray-400 leading-none">Pengunjung Unik</p>
+                <p className="text-sm md:text-xl font-extrabold text-blue-950 mt-1">
+                  {analytics.uniqueVisitors.toLocaleString('id-ID')}
+                </p>
+                <span className="text-[8px] text-blue-700 font-medium">Berdasarkan sidik perangkat</span>
+              </div>
+            </div>
+
+            {/* Average Duration */}
+            <div className="bg-amber-50/45 border border-amber-100/70 p-3 rounded-xl flex items-center gap-3">
+              <div className="bg-amber-100/60 p-2 rounded-lg text-amber-800">
+                <Clock size={18} className="md:w-5 md:h-5" />
+              </div>
+              <div>
+                <p className="text-[10px] text-gray-400 leading-none">Rata-rata Sesi</p>
+                <p className="text-sm md:text-xl font-extrabold text-amber-950 mt-1">
+                  {analytics.avgDurationMin.toFixed(1)} <span className="text-[10px] md:text-xs font-semibold">Min</span>
+                </p>
+                <span className="text-[8px] text-amber-750 font-medium">Durasi membaca laporan</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Histogram Tren Kunjungan 7 Hari Terakhir */}
+          <div className="mt-4 md:mt-6 bg-slate-50/60 border border-slate-100 p-3 md:p-4 rounded-xl">
+            <h4 className="font-bold text-[11px] md:text-xs text-slate-700 mb-1 flex items-center gap-1">
+              <span>📅 Tren Kunjungan Harian</span>
+              <span className="text-[9px] font-normal text-slate-400">(7 Hari Terakhir)</span>
+            </h4>
+            
+            {/* Bars container */}
+            <div className="flex items-end justify-between gap-1.5 md:gap-3 h-28 pt-4 pb-1">
+              {analytics.dailyViews.map((day, idx) => {
+                const maxViews = Math.max(...analytics.dailyViews.map(d => d.views), 1);
+                // Ensure percentage is at least 15% for visual feedback
+                const percent = Math.max(15, Math.floor((day.views / maxViews) * 100));
+                return (
+                  <div key={idx} className="flex-1 flex flex-col items-center gap-1 group relative">
+                    {/* Tooltip on hover */}
+                    <div className="absolute bottom-full mb-1 bg-slate-900 border border-slate-800 text-white text-[8px] font-mono rounded px-1.5 py-0.5 opacity-0 group-hover:opacity-100 transition-opacity duration-150 whitespace-nowrap z-30 pointer-events-none shadow-md shadow-slate-950/20" style={{ fontSize: '9px' }}>
+                      {day.views} Views • {day.unique} Unik
+                    </div>
+                    {/* Bar visual */}
+                    <div className="w-full bg-slate-100/80 rounded-sm overflow-hidden h-20 flex items-end animate-fade-in-up">
+                      <div 
+                        style={{ height: `${percent}%` }}
+                        className="w-full bg-gradient-to-t from-emerald-600 to-emerald-400 hover:from-emerald-700 hover:to-emerald-500 transition-all duration-300 rounded-sm cursor-pointer"
+                      ></div>
+                    </div>
+                    {/* Label */}
+                    <span className="text-[8px] md:text-[9px] text-slate-400 font-semibold truncate max-w-[48px] md:max-w-full text-center">
+                      {day.date.split(',')[0]}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Rincian Segmentasi (Perangkat & Browser) */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 border-t pt-4 border-gray-105">
+            {/* Segmentasi Perangkat */}
+            <div className="space-y-2.5">
+              <h4 className="font-bold text-[11px] md:text-xs text-gray-700 flex items-center gap-1">
+                <Smartphone size={12} className="text-gray-500" />
+                <span>📱 Segmentasi Perangkat</span>
+              </h4>
+              <div className="space-y-2">
+                {(() => {
+                  const total = analytics.devices.mobile + analytics.devices.desktop + analytics.devices.tablet || 1;
+                  const mobPct = Math.round((analytics.devices.mobile / total) * 100);
+                  const dskPct = Math.round((analytics.devices.desktop / total) * 100);
+                  const tabPct = 100 - mobPct - dskPct; // ensure perfectly sums up to 100%
+                  
+                  return (
+                    <>
+                      {/* Mobile */}
+                      <div className="text-[10px] md:text-xs space-y-1">
+                        <div className="flex justify-between text-gray-600 font-medium">
+                          <span className="flex items-center gap-1">
+                            <Smartphone size={10} className="text-slate-400" /> Smartphone / HP
+                          </span>
+                          <span>{mobPct}% ({analytics.devices.mobile})</span>
+                        </div>
+                        <div className="w-full bg-gray-100 h-1.5 rounded-full overflow-hidden">
+                          <div className="bg-emerald-500 h-full rounded-full" style={{ width: `${mobPct}%` }}></div>
+                        </div>
+                      </div>
+
+                      {/* Desktop */}
+                      <div className="text-[10px] md:text-xs space-y-1">
+                        <div className="flex justify-between text-gray-600 font-medium">
+                          <span className="flex items-center gap-1">
+                            <Laptop size={10} className="text-slate-400" /> Komputer / Laptop
+                          </span>
+                          <span>{dskPct}% ({analytics.devices.desktop})</span>
+                        </div>
+                        <div className="w-full bg-gray-100 h-1.5 rounded-full overflow-hidden">
+                          <div className="bg-blue-500 h-full rounded-full" style={{ width: `${dskPct}%` }}></div>
+                        </div>
+                      </div>
+
+                      {/* Tablet */}
+                      <div className="text-[10px] md:text-xs space-y-1">
+                        <div className="flex justify-between text-gray-600 font-medium">
+                          <span className="flex items-center gap-1">
+                            <Tablet size={10} className="text-slate-400" /> Tablet (iPad/Android)
+                          </span>
+                          <span>{Math.max(0, tabPct)}% ({analytics.devices.tablet})</span>
+                        </div>
+                        <div className="w-full bg-gray-100 h-1.5 rounded-full overflow-hidden">
+                          <div className="bg-amber-500 h-full rounded-full" style={{ width: `${Math.max(0, tabPct)}%` }}></div>
+                        </div>
+                      </div>
+                    </>
+                  );
+                })()}
+              </div>
+            </div>
+
+            {/* Segmentasi Browser */}
+            <div className="space-y-2.5">
+              <h4 className="font-bold text-[11px] md:text-xs text-gray-700 flex items-center gap-1">
+                <Globe size={12} className="text-gray-500" />
+                <span>🌐 Browser Utama Pengakses</span>
+              </h4>
+              <div className="space-y-2">
+                {(() => {
+                  const total = analytics.browsers.chrome + analytics.browsers.safari + analytics.browsers.firefox + analytics.browsers.edge + analytics.browsers.other || 1;
+                  const chromePct = Math.round((analytics.browsers.chrome / total) * 100);
+                  const safariPct = Math.round((analytics.browsers.safari / total) * 100);
+                  const firefoxPct = Math.round((analytics.browsers.firefox / total) * 100);
+                  const edgePct = Math.round((analytics.browsers.edge / total) * 100);
+                  const otherPct = 100 - chromePct - safariPct - firefoxPct - edgePct;
+
+                  const browserList = [
+                    { name: 'Google Chrome', pct: chromePct, count: analytics.browsers.chrome, color: 'bg-emerald-500' },
+                    { name: 'Safari / iOS Safari', pct: safariPct, count: analytics.browsers.safari, color: 'bg-blue-500' },
+                    { name: 'Mozilla Firefox', pct: firefoxPct, count: analytics.browsers.firefox, color: 'bg-orange-500' },
+                    { name: 'Microsoft Edge', pct: edgePct, count: analytics.browsers.edge, color: 'bg-indigo-500' },
+                    { name: 'Lainnya (In-App)', pct: Math.max(0, otherPct), count: analytics.browsers.other, color: 'bg-slate-400' },
+                  ].sort((a, b) => b.pct - a.pct); // sort by highest percentage first for professional look
+
+                  return browserList.map((browser, idx) => (
+                    <div key={idx} className="text-[10px] md:text-xs">
+                      <div className="flex justify-between text-gray-600 font-medium mb-0.5">
+                        <span className="flex items-center gap-1">{browser.name}</span>
+                        <span>{browser.pct}% ({browser.count})</span>
+                      </div>
+                      <div className="w-full bg-gray-100 h-1 rounded-full overflow-hidden">
+                        <div className={`${browser.color} h-full rounded-full`} style={{ width: `${browser.pct}%` }}></div>
+                      </div>
+                    </div>
+                  ));
+                })()}
+              </div>
+            </div>
+          </div>
         </div>
       )}
 

@@ -5,6 +5,7 @@ import { formatCurrency, formatDate, formatDateTime } from '../utils/format';
 import { X, ChevronDown, Wallet, TrendingDown, TrendingUp, FileText, Calendar } from 'lucide-react';
 import Swal from 'sweetalert2';
 import { generatePDF } from '../utils/pdfGenerator';
+import { trackNewVisit } from '../utils/analytics';
 
 const PublicHome: React.FC = () => {
   const { publishedData } = useData();
@@ -13,6 +14,11 @@ const PublicHome: React.FC = () => {
   
   // Ref untuk memastikan auto-select hanya terjadi sekali saat data pertama kali dimuat
   const hasSetInitialWeek = useRef(false);
+
+  // Track new website visit on initial page load
+  useEffect(() => {
+    trackNewVisit();
+  }, []);
 
   // URL Assets
   const waLogoUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/1280px-WhatsApp.svg.png";
@@ -590,13 +596,13 @@ const PublicHome: React.FC = () => {
                                 <span className="inline-block w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
                                 <p className="text-[10px] uppercase text-slate-400 font-bold tracking-widest">Scan QR Code</p>
                             </div>
-                            <p className="text-xs text-slate-500 max-w-[260px] mx-auto leading-relaxed">
+                            <p className="text-[10px] md:text-[11px] text-slate-400 max-w-[265px] mx-auto leading-relaxed">
                                 Mendukung semua aplikasi e-wallet (GoPay, OVO, Dana, LinkAja) & semua m-banking Anda.
                                 <a 
                                     href="https://lh3.googleusercontent.com/d/1Fm9fRkKJZhwVenyMYSFEnZCXUltpUl6B" 
                                     target="_blank" 
                                     rel="noopener noreferrer" 
-                                    className="text-blue-650 hover:text-blue-800 underline font-medium block mt-2 transition-colors duration-200"
+                                    className="text-blue-600 hover:text-blue-600 underline font-medium block mt-1.5"
                                 >
                                     Unduh Gambar QRIS
                                 </a>
