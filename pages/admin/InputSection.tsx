@@ -130,24 +130,22 @@ const InputSection: React.FC = () => {
         });
     } else {
         Swal.fire({
-            title: 'Hapus dari Database?',
+            title: 'Verifikasi Keamanan',
             html: `
-                <p class="mb-3 text-sm text-gray-600">Data ini sudah dipublikasikan. Menghapusnya akan langsung hilang dari website publik.</p>
-                <div class="text-left bg-red-50 p-2 rounded border border-red-100 text-red-800 text-xs font-bold mb-3 flex items-center gap-2">
-                     🔐 Masukkan Kode ID Server
-                </div>
+                <p class="mb-3 text-[13px] text-gray-500 leading-relaxed text-center">Data ini sudah dipublikasikan. Menghapusnya akan langsung hilang dari website publik.</p>
+                <p class="mb-2 text-sm font-semibold text-gray-750 text-center">Masukkan Kode Token ID Server:</p>
                 <div class="relative w-full max-w-xs mx-auto" style="display: block;">
                     <input 
                         type="password" 
                         id="swal-custom-password" 
-                        class="swal2-input" 
-                        placeholder="Kode ID Server..." 
-                        style="display: block; width: 100%; box-sizing: border-box; margin: 10px auto; padding-right: 40px;"
+                        class="swal2-input !m-0 !w-full" 
+                        placeholder="Kode Token ID Server..." 
+                        style="display: block; width: 100%; box-sizing: border-box; padding-right: 42px; height: 44px; font-size: 15px;"
                     />
                     <button 
                         type="button" 
                         id="swal-toggle-password" 
-                        style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); border: none; background: none; cursor: pointer; padding: 4px; display: flex; align-items: center; justify-content: center; z-index: 10; color: #6b7280;"
+                        style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); border: none; background: none; cursor: pointer; padding: 4px; display: flex; align-items: center; justify-content: center; z-index: 10; color: #9ca3af;"
                         title="Intip Password"
                     >
                         <svg id="eye-open-icon" style="display: none;" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0z"/><circle cx="12" cy="12" r="3"/></svg>
@@ -157,10 +155,10 @@ const InputSection: React.FC = () => {
             `,
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#3085d6', 
-            cancelButtonColor: '#ff0000',
-            confirmButtonText: 'Ya, Hapus Data',
-            cancelButtonText: 'Batal',
+            confirmButtonColor: '#d33', 
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'OK',
+            cancelButtonText: 'Cancel',
             didOpen: () => {
                 const toggleBtn = document.getElementById('swal-toggle-password');
                 const passwordInput = document.getElementById('swal-custom-password') as HTMLInputElement;
@@ -184,7 +182,7 @@ const InputSection: React.FC = () => {
             preConfirm: () => {
                 const password = (document.getElementById('swal-custom-password') as HTMLInputElement).value;
                 if (!password) {
-                    Swal.showValidationMessage('Kode ID Server wajib diisi!');
+                    Swal.showValidationMessage('Kode Token ID Server wajib diisi!');
                     return false;
                 }
                 return password;
@@ -204,7 +202,7 @@ const InputSection: React.FC = () => {
                     }
                     if (editingId === id) cancelEdit(); 
                 } else {
-                    Swal.fire({ title: 'Kode ID Server Gagal!', text: 'Kode ID Server SALAH.', icon: 'error', confirmButtonColor: '#d33' });
+                    Swal.fire({ title: 'Gagal', text: 'Kode Token ID Server SALAH.', icon: 'error', confirmButtonColor: '#d33' });
                 }
             }
         });
@@ -213,24 +211,22 @@ const InputSection: React.FC = () => {
 
   const confirmUpdatePublished = (callback: () => Promise<void>) => {
       Swal.fire({
-          title: 'Update Database?',
+          title: 'Verifikasi Keamanan',
           html: `
-            <p class="mb-3 text-sm text-gray-600">Yakin data akan di rubah ? Perubahan akan langsung terlihat publik.</p>
-            <div class="text-left bg-orange-50 p-2 rounded border border-orange-100 text-orange-800 text-xs font-bold mb-3 flex items-center gap-2">
-                 🔐 Masukkan Kode ID Server
-            </div>
+            <p class="mb-3 text-[13px] text-gray-500 leading-relaxed text-center">Yakin data akan di rubah ? Perubahan akan langsung terlihat publik.</p>
+            <p class="mb-2 text-sm font-semibold text-gray-750 text-center">Masukkan Kode Token ID Server:</p>
             <div class="relative w-full max-w-xs mx-auto" style="display: block;">
                 <input 
                     type="password" 
                     id="swal-custom-password" 
-                    class="swal2-input" 
-                    placeholder="Kode ID Server..." 
-                    style="display: block; width: 100%; box-sizing: border-box; margin: 10px auto; padding-right: 40px;"
+                    class="swal2-input !m-0 !w-full" 
+                    placeholder="Kode Token ID Server..." 
+                    style="display: block; width: 100%; box-sizing: border-box; padding-right: 42px; height: 44px; font-size: 15px;"
                 />
                 <button 
                     type="button" 
                     id="swal-toggle-password" 
-                    style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); border: none; background: none; cursor: pointer; padding: 4px; display: flex; align-items: center; justify-content: center; z-index: 10; color: #6b7280;"
+                    style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); border: none; background: none; cursor: pointer; padding: 4px; display: flex; align-items: center; justify-content: center; z-index: 10; color: #9ca3af;"
                     title="Intip Password"
                 >
                     <svg id="eye-open-icon" style="display: none;" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0z"/><circle cx="12" cy="12" r="3"/></svg>
@@ -241,9 +237,9 @@ const InputSection: React.FC = () => {
           icon: 'warning',
           showCancelButton: true,
           confirmButtonColor: '#047857',
-          cancelButtonColor: '#d33',
-          confirmButtonText: 'Ya, Update Data',
-          cancelButtonText: 'Batal',
+          cancelButtonColor: '#6c757d',
+          confirmButtonText: 'OK',
+          cancelButtonText: 'Cancel',
           didOpen: () => {
               const toggleBtn = document.getElementById('swal-toggle-password');
               const passwordInput = document.getElementById('swal-custom-password') as HTMLInputElement;
@@ -267,7 +263,7 @@ const InputSection: React.FC = () => {
           preConfirm: () => {
               const password = (document.getElementById('swal-custom-password') as HTMLInputElement).value;
               if (!password) {
-                  Swal.showValidationMessage('Kode ID Server wajib diisi!');
+                  Swal.showValidationMessage('Kode Token ID Server wajib diisi!');
                   return false;
               }
               return password;
@@ -277,7 +273,7 @@ const InputSection: React.FC = () => {
               if (result.value === AUTH_CODE) {
                   callback();
               } else {
-                  Swal.fire('Gagal', 'Kode ID Server SALAH.', 'error');
+                  Swal.fire('Gagal', 'Kode Token ID Server SALAH.', 'error');
               }
           }
       });

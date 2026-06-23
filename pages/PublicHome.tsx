@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useData } from '../context/DataContext';
 import SummaryCard from '../components/SummaryCard';
 import { formatCurrency, formatDate, formatDateTime } from '../utils/format';
-import { X, ChevronDown, Wallet, TrendingDown, TrendingUp, Copy, FileText, Calendar } from 'lucide-react';
+import { X, ChevronDown, Wallet, TrendingDown, TrendingUp, FileText, Calendar } from 'lucide-react';
 import Swal from 'sweetalert2';
 import { generatePDF } from '../utils/pdfGenerator';
 
@@ -15,7 +15,6 @@ const PublicHome: React.FC = () => {
   const hasSetInitialWeek = useRef(false);
 
   // URL Assets
-  const bcaLogoUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Bank_Central_Asia.svg/1280px-Bank_Central_Asia.svg.png";
   const waLogoUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/1280px-WhatsApp.svg.png";
 
   // --- SORTING HELPERS (Tanggal Kecil di Atas) ---
@@ -111,16 +110,8 @@ const PublicHome: React.FC = () => {
     return `${day}/${month}/${year}`;
   };
 
-  const handleCopyRekening = () => {
-    navigator.clipboard.writeText('7296012717');
-    Swal.fire({
-      icon: 'success',
-      title: 'Disalin',
-      text: 'Nomor Rekening BCA berhasil disalin',
-      timer: 1500,
-      showConfirmButton: false
-    });
-  };
+
+
 
   const handleKonfirmasi = () => {
     const message = "Assalamu'alaikum Saya sudah transfer donasi untuk PHBI Maulid 2026. Mohon konfirmasi pencatatan dana. Berikut bukti transferan saya";
@@ -579,24 +570,28 @@ const PublicHome: React.FC = () => {
             <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-primary via-gold to-primary"></div>
             <div className="flex flex-col md:flex-row items-center justify-between gap-4 md:gap-6">
                 
-                {/* Rekening Info */}
-                <div className="flex flex-col items-center md:items-start text-center md:text-left space-y-1 w-full md:w-auto">
+                {/* QRIS Code Info */}
+                <div className="flex flex-col items-center md:items-start text-center md:text-left space-y-2 w-full md:w-auto animate-fade-in">
                     {/* UPDATED TITLE & SUBTITLE */}
                     <h3 className="font-serif text-base md:text-4xl font-bold text-gray-800 whitespace-nowrap">Ayo Sukseskan Acara PHBI</h3>
-                    <p className="text-[11px] md:text-sm text-gray-500 pb-2">dapat donasikan melalui transfer Bank</p>
+                    <p className="text-[11px] md:text-sm text-gray-500 pb-2">dapat didonasikan melalui Scan QRIS di bawah ini</p>
                     
-                    <div className="bg-blue-50 border border-blue-200 p-3 md:p-4 rounded-xl flex items-center gap-3 shadow-sm w-full md:w-auto justify-center md:justify-start">
-                        <img src={bcaLogoUrl} alt="BCA" className="h-6 md:h-8 object-contain" />
-                        <div>
-                            <p className="text-[9px] md:text-[10px] uppercase text-gray-500 font-bold tracking-wider">Bank Central Asia (BCA)</p>
-                            <p className="text-base md:text-3xl font-mono font-bold text-gray-800 tracking-wider">7296012717</p>
-                            <div className="flex items-center justify-center md:justify-start gap-2">
-                                <p className="text-[10px] md:text-xs text-gray-600 font-semibold ">a.n Mahendera</p>
-                                {/* TOMBOL MERAH */}
-                                <button onClick={handleCopyRekening} className="text-white bg-red-600 hover:bg-red-700 p-1 rounded transition shadow-sm" title="Salin No Rek">
-                                    <Copy size={11} className="md:w-3 md:h-3" />
-                                </button>
+                    <div className="bg-slate-50 border border-slate-200/80 p-5 md:p-6 rounded-2xl flex flex-col items-center justify-center shadow-[0_4px_20px_rgba(0,0,0,0.05)] w-full md:w-[360px] gap-4 transition-all duration-300 hover:shadow-[0_8px_30px_rgba(0,0,0,0.08)] bg-gradient-to-b from-white to-slate-50">
+                        <div className="flex items-center justify-center w-[300px] h-[300px] overflow-hidden group transition-transform duration-300 hover:scale-[1.02]">
+                            <img 
+                                src="https://lh3.googleusercontent.com/d/1Fm9fRkKJZhwVenyMYSFEnZCXUltpUl6B" 
+                                alt="QRIS Donasi PHBI" 
+                                className="w-full h-full object-contain"
+                                referrerPolicy="no-referrer"
+                            />
+                        </div>
+                        <div className="text-center space-y-1">
+                            <div className="flex items-center justify-center gap-1.5">
+                                <span className="inline-block w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                                <p className="text-[10px] uppercase text-slate-400 font-bold tracking-widest">Scan QR Code</p>
                             </div>
+                            <p className="text-base font-bold text-slate-800 tracking-tight">Pembayaran Resmi QRIS</p>
+                            <p className="text-xs text-slate-500 max-w-[260px] mx-auto leading-relaxed">Mendukung semua aplikasi e-wallet (GoPay, OVO, Dana, LinkAja) & semua m-banking Anda</p>
                         </div>
                     </div>
                 </div>

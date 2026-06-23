@@ -111,21 +111,22 @@ function doGet() {
 
   const handleDelete = async (id: string, username: string) => {
       const { value: masterPass } = await Swal.fire({
-          title: 'Hapus Admin?',
+          title: 'Verifikasi Keamanan',
           html: `
-              <p class="mb-3 text-sm text-gray-600">Hapus user: <strong>${username}</strong></p>
+              <p class="mb-3 text-[13px] text-gray-500 leading-relaxed text-center">Hapus user: <strong>${username}</strong></p>
+              <p class="mb-2 text-sm font-semibold text-gray-750 text-center">Masukkan Kode Token ID Server:</p>
               <div class="relative w-full max-w-xs mx-auto" style="display: block;">
                   <input 
                       type="password" 
                       id="swal-custom-password" 
-                      class="swal2-input" 
-                      placeholder="Masukkan Kode ID Server" 
-                      style="display: block; width: 100%; box-sizing: border-box; margin: 10px auto; padding-right: 40px;"
+                      class="swal2-input !m-0 !w-full" 
+                      placeholder="Kode Token ID Server..." 
+                      style="display: block; width: 100%; box-sizing: border-box; padding-right: 42px; height: 44px; font-size: 15px;"
                   />
                   <button 
                       type="button" 
                       id="swal-toggle-password" 
-                      style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); border: none; background: none; cursor: pointer; padding: 4px; display: flex; align-items: center; justify-content: center; z-index: 10; color: #6b7280;"
+                      style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); border: none; background: none; cursor: pointer; padding: 4px; display: flex; align-items: center; justify-content: center; z-index: 10; color: #9ca3af;"
                       title="Intip Password"
                   >
                       <svg id="eye-open-icon" style="display: none;" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0z"/><circle cx="12" cy="12" r="3"/></svg>
@@ -133,13 +134,12 @@ function doGet() {
                   </button>
               </div>
           `,
+          icon: 'warning',
           showCancelButton: true,
           confirmButtonColor: '#d33',
-          confirmButtonText: 'Hapus',
-          cancelButtonText: 'Batal',
-          customClass: {
-            title: 'text-lg'
-          },
+          cancelButtonColor: '#6c757d',
+          confirmButtonText: 'OK',
+          cancelButtonText: 'Cancel',
           didOpen: () => {
               const toggleBtn = document.getElementById('swal-toggle-password');
               const passwordInput = document.getElementById('swal-custom-password') as HTMLInputElement;
@@ -163,7 +163,7 @@ function doGet() {
           preConfirm: () => {
               const password = (document.getElementById('swal-custom-password') as HTMLInputElement).value;
               if (!password) {
-                  Swal.showValidationMessage('Kode ID Server wajib diisi!');
+                  Swal.showValidationMessage('Kode Token ID Server wajib diisi!');
                   return false;
               }
               return password;
