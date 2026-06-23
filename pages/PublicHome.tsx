@@ -590,8 +590,17 @@ const PublicHome: React.FC = () => {
                                 <span className="inline-block w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
                                 <p className="text-[10px] uppercase text-slate-400 font-bold tracking-widest">Scan QR Code</p>
                             </div>
-                            <p className="text-base font-bold text-slate-800 tracking-tight">Pembayaran Resmi QRIS</p>
-                            <p className="text-xs text-slate-500 max-w-[260px] mx-auto leading-relaxed">Mendukung semua aplikasi e-wallet (GoPay, OVO, Dana, LinkAja) & semua m-banking Anda</p>
+                            <p className="text-xs text-slate-500 max-w-[260px] mx-auto leading-relaxed">
+                                Mendukung semua aplikasi e-wallet (GoPay, OVO, Dana, LinkAja) & semua m-banking Anda.
+                                <a 
+                                    href="https://lh3.googleusercontent.com/d/1Fm9fRkKJZhwVenyMYSFEnZCXUltpUl6B" 
+                                    target="_blank" 
+                                    rel="noopener noreferrer" 
+                                    className="text-blue-650 hover:text-blue-800 underline font-medium block mt-2 transition-colors duration-200"
+                                >
+                                    Unduh Gambar QRIS
+                                </a>
+                            </p>
                         </div>
                     </div>
                 </div>
