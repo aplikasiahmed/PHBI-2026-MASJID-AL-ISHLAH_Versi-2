@@ -57,11 +57,11 @@ const getBase64ImageFromURL = (url: string): Promise<string> => {
 };
 
 export const generatePDF = async (data: AppData, type: 'weekly' | 'donor' | 'expense' | 'all_income' | 'all_financial' | 'accountability') => {
-  // SETTING UKURAN KERTAS F4 (210mm x 330mm)
+  // SETTING UKURAN KERTAS A4 (210mm x 297mm)
   const doc = new jsPDF({
     orientation: 'portrait',
     unit: 'mm',
-    format: [210, 330] 
+    format: 'a4' 
   });
 
   const updateDateStr = `(Update: ${formatDateTime(data.lastUpdated)}) `;
@@ -150,7 +150,7 @@ export const generatePDF = async (data: AppData, type: 'weekly' | 'donor' | 'exp
     if (!isFirstSection) {
         const lastTableY = (doc as any).lastAutoTable?.finalY || startY;
         startY = lastTableY + 8; 
-        if (startY > 280) {
+        if (startY > 255) {
             doc.addPage();
             startY = 46; 
         }
@@ -167,7 +167,7 @@ export const generatePDF = async (data: AppData, type: 'weekly' | 'donor' | 'exp
     if (!isFirstSection) {
         const lastTableY = (doc as any).lastAutoTable?.finalY || startY;
         startY = lastTableY + 6; 
-        if (startY > 280) {
+        if (startY > 255) {
             doc.addPage();
             startY = 46; 
         }
@@ -188,10 +188,6 @@ export const generatePDF = async (data: AppData, type: 'weekly' | 'donor' | 'exp
       doc.text("PANITIA PERINGATAN HARI BESAR ISLAM (PHBI)", 108, startY + 7, { align: 'center' });
       doc.text("MAULID NABI MUHAMMAD SAW 1448 H / 2026 M", 108, startY + 12, { align: 'center' });
       
-      doc.setFont("times", "normal");
-      doc.setFontSize(9);
-      doc.text("Masjid Jam'i Al-Ishlah Kp. Teriti RW. 04", 108, startY + 17, { align: 'center' });
-
       startY += 25;
       
       addLeftTitle('I', 'LAPORAN SALDO AWAL (PANITIA SEBELUMNYA)', true);
@@ -201,12 +197,13 @@ export const generatePDF = async (data: AppData, type: 'weekly' | 'donor' | 'exp
         const rows = sortedPrev.map((item, idx) => [
             idx + 1,
             formatDate(item.date),
+            'Sisa Saldo / Dana Awal Panitia Periode Sebelumnya',
             formatCurrency(item.nominal)
         ]);
 
         autoTable(doc, {
             startY: startY,
-            head: [['NO', 'TANGGAL', 'NOMINAL']],
+            head: [['NO', 'TANGGAL', 'KETERANGAN', 'NOMINAL']],
             body: rows,
             theme: 'grid',
             styles: lpjStyles, 
@@ -217,11 +214,12 @@ export const generatePDF = async (data: AppData, type: 'weekly' | 'donor' | 'exp
             columnStyles: { 
                 0: { halign: 'center', cellWidth: colWidthNo }, 
                 1: { cellWidth: colWidthDate, halign: 'center' },
-                2: { halign: 'right', cellWidth: colWidthNominal }
+                2: { halign: 'left', cellWidth: 'auto' },
+                3: { halign: 'right', cellWidth: colWidthNominal }
             },
             margin: tableMargin,
             foot: [[
-                { content: '', colSpan: 1 },
+                { content: '', colSpan: 2 },
                 { content: 'SALDO AWAL ', styles: { halign: 'right'} },
                 { content: formatCurrency(data.previousFunds.reduce((a,b)=>a+b.nominal,0)), styles: { halign: 'right' } }
             ]]
@@ -423,7 +421,7 @@ export const generatePDF = async (data: AppData, type: 'weekly' | 'donor' | 'exp
         
         // --- TAMBAHAN TANDA TANGAN ---
         let sigY = finalYTable + 25;
-        if (sigY + 50 > 320) {
+        if (sigY + 50 > 285) {
             doc.addPage();
             sigY = 50;
         }
@@ -475,11 +473,12 @@ export const generatePDF = async (data: AppData, type: 'weekly' | 'donor' | 'exp
             const rows = sortedPrev.map((item, idx) => [
                 idx + 1,
                 formatDate(item.date),
+                'Sisa Saldo / Dana Awal Panitia Periode Sebelumnya',
                 formatCurrency(item.nominal)
             ]);
             autoTable(doc, {
                 startY: startY,
-                head: [['No', 'TANGGAL', 'NOMINAL']],
+                head: [['No', 'TANGGAL', 'KETERANGAN', 'NOMINAL']],
                 body: rows,
                 theme: 'grid',
                 styles: compactStyles,
@@ -489,11 +488,13 @@ export const generatePDF = async (data: AppData, type: 'weekly' | 'donor' | 'exp
                 footStyles: { ...compactStyles, fillColor: [233, 213, 255], textColor: [0, 0, 0], fontStyle: 'bold' },
                 columnStyles: { 
                     0: { halign: 'center', textColor: [0, 0, 0], cellWidth: 15 }, 
-                    2: { halign: 'right', textColor: [0, 0, 0], cellWidth: 35 } 
+                    1: { halign: 'center', textColor: [0, 0, 0], cellWidth: 30 }, 
+                    2: { halign: 'left', textColor: [0, 0, 0], cellWidth: 'auto' }, 
+                    3: { halign: 'right', textColor: [0, 0, 0], cellWidth: 35 } 
                 },
                 margin: tableMargin, 
                 foot: [[
-                    { content: '', colSpan: 1, styles: { textColor: [0, 0, 0] }},
+                    { content: '', colSpan: 2, styles: { textColor: [0, 0, 0] }},
                     { content: 'SALDO AWAL ', styles: { halign: 'right'} },
                     { content: formatCurrency(data.previousFunds.reduce((a,b)=>a+b.nominal,0)), styles: { halign: 'right', textColor: [0, 0, 0] } }
                 ]]
