@@ -197,8 +197,16 @@ const InputSection: React.FC = () => {
                     if (type === 'expense') table = 'Pengeluaran_data';
                     
                     if (table) {
+                        Swal.fire({
+                            title: 'Menghapus Data...',
+                            text: 'Menghubungi server spreadsheet...',
+                            allowOutsideClick: false,
+                            didOpen: () => { Swal.showLoading(); }
+                        });
                         const success = await deletePublishedItem(table, id);
-                        if (success) Swal.fire('Terhapus!', 'Data berhasil dihapus dari database.', 'success');
+                        if (success) {
+                            Swal.fire('Terhapus!', 'Data berhasil dihapus dari database.', 'success');
+                        }
                     }
                     if (editingId === id) cancelEdit(); 
                 } else {
@@ -213,9 +221,9 @@ const InputSection: React.FC = () => {
       Swal.fire({
           title: 'Verifikasi Keamanan',
           html: `
-            <p class="mb-3 text-[13px] text-gray-500 leading-relaxed text-center">Yakin data akan di rubah ? Perubahan akan langsung terlihat publik.</p>
+            <p class="mb-3 text-[13px] text-gray-500 leading-relaxed text-center">Yakin data akan diubah? Data lama di database akan dihapus, dan hasil edit akan dimasukkan ke draf agar dapat dipublikasikan ulang.</p>
             <p class="mb-2 text-sm font-semibold text-gray-750 text-center">Masukkan Kode Token ID Server:</p>
-            <div class="relative w-full max-w-xs mx-auto" style="display: block;">
+            <div class="relative w-full max-xs mx-auto" style="display: block; max-width: 20rem;">
                 <input 
                     type="password" 
                     id="swal-custom-password" 
@@ -284,7 +292,25 @@ const InputSection: React.FC = () => {
     const nominal = parseNumberInput(prevForm.nominal);
     if (editingId) {
        if (editingSource === 'published') {
-           confirmUpdatePublished(async () => { const success = await updatePublishedItem('DanaSebelumnya_data', editingId, { date: prevForm.date, nominal: nominal }); if (success) { Swal.fire('Sukses', 'Data di database berhasil diupdate', 'success'); cancelEdit(); } });
+           confirmUpdatePublished(async () => {
+               Swal.fire({
+                   title: 'Memproses Perubahan...',
+                   text: 'Menghapus data lama dari database dan memindahkan ke draf...',
+                   allowOutsideClick: false,
+                   didOpen: () => { Swal.showLoading(); }
+               });
+               const success = await deletePublishedItem('DanaSebelumnya_data', editingId);
+               if (success) {
+                   addPreviousFund({ date: prevForm.date, nominal: nominal });
+                   cancelEdit();
+                   Swal.fire({
+                       icon: 'success',
+                       title: 'Berhasil Diubah menjadi Draft!',
+                       text: 'Data lama telah dihapus dari database. Hasil edit telah disimpan sebagai draf baru di tab Preview. Silakan publikasikan ulang.',
+                       confirmButtonColor: '#047857'
+                   });
+               }
+           });
        } else {
            confirmAction('Simpan Perubahan Draft?', 'Data draft akan diperbarui.', () => { updatePreviousFund(editingId, { date: prevForm.date, nominal: nominal }); cancelEdit(); Swal.fire('Sukses', 'Draft diupdate', 'success'); });
        }
@@ -335,7 +361,25 @@ const InputSection: React.FC = () => {
 
     if (editingId) {
         if (editingSource === 'published') {
-            confirmUpdatePublished(async () => { const dbPayload = { date: weekForm.date, week: weekForm.week, rt: weekForm.rt, gross_amount: gross, consumption_cut: consumption, commission_cut: commission, net_amount: net }; const success = await updatePublishedItem('Mingguan_data', editingId, dbPayload); if (success) { Swal.fire('Sukses', 'Data di database berhasil diupdate', 'success'); cancelEdit(); } });
+            confirmUpdatePublished(async () => {
+                Swal.fire({
+                    title: 'Memproses Perubahan...',
+                    text: 'Menghapus data lama dari database dan memindahkan ke draf...',
+                    allowOutsideClick: false,
+                    didOpen: () => { Swal.showLoading(); }
+                });
+                const success = await deletePublishedItem('Mingguan_data', editingId);
+                if (success) {
+                    addWeeklyData({ date: weekForm.date, week: weekForm.week, rt: weekForm.rt, grossAmount: gross, consumptionCut: consumption, commissionCut: commission, netAmount: net });
+                    cancelEdit();
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil Diubah menjadi Draft!',
+                        text: 'Data lama telah dihapus dari database. Hasil edit telah disimpan sebagai draf baru di tab Preview. Silakan publikasikan ulang.',
+                        confirmButtonColor: '#047857'
+                    });
+                }
+            });
         } else {
             confirmAction('Simpan Perubahan Draft?', 'Data draft akan diperbarui.', () => { const payload = { date: weekForm.date, week: weekForm.week, rt: weekForm.rt, grossAmount: gross, consumptionCut: consumption, commissionCut: commission, netAmount: net }; updateWeeklyData(editingId, payload); cancelEdit(); Swal.fire('Berhasil!', 'Draft diupdate.', 'success'); });
         }
@@ -363,7 +407,25 @@ const InputSection: React.FC = () => {
     const nominal = parseNumberInput(donorForm.nominal);
     if (editingId) {
         if (editingSource === 'published') {
-            confirmUpdatePublished(async () => { const success = await updatePublishedItem('Donatur_data', editingId, { date: donorForm.date, name: donorForm.name, nominal: nominal }); if (success) { Swal.fire('Sukses', 'Data di database berhasil diupdate', 'success'); cancelEdit(); } });
+            confirmUpdatePublished(async () => {
+                Swal.fire({
+                    title: 'Memproses Perubahan...',
+                    text: 'Menghapus data lama dari database dan memindahkan ke draf...',
+                    allowOutsideClick: false,
+                    didOpen: () => { Swal.showLoading(); }
+                });
+                const success = await deletePublishedItem('Donatur_data', editingId);
+                if (success) {
+                    addDonor({ date: donorForm.date, name: donorForm.name, nominal: nominal });
+                    cancelEdit();
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil Diubah menjadi Draft!',
+                        text: 'Data lama telah dihapus dari database. Hasil edit telah disimpan sebagai draf baru di tab Preview. Silakan publikasikan ulang.',
+                        confirmButtonColor: '#047857'
+                    });
+                }
+            });
         } else {
             confirmAction('Simpan Perubahan Draft?', 'Data draft akan diperbarui.', () => { updateDonor(editingId, { date: donorForm.date, name: donorForm.name, nominal: nominal }); cancelEdit(); Swal.fire('Sukses', 'Draft diupdate', 'success'); });
         }
@@ -391,7 +453,25 @@ const InputSection: React.FC = () => {
     const nominal = parseNumberInput(expForm.nominal);
     if (editingId) {
         if (editingSource === 'published') {
-            confirmUpdatePublished(async () => { const success = await updatePublishedItem('Pengeluaran_data', editingId, { date: expForm.date, purpose: expForm.purpose, nominal: nominal }); if (success) { Swal.fire('Sukses', 'Data di database berhasil diupdate', 'success'); cancelEdit(); } });
+            confirmUpdatePublished(async () => {
+                Swal.fire({
+                    title: 'Memproses Perubahan...',
+                    text: 'Menghapus data lama dari database dan memindahkan ke draf...',
+                    allowOutsideClick: false,
+                    didOpen: () => { Swal.showLoading(); }
+                });
+                const success = await deletePublishedItem('Pengeluaran_data', editingId);
+                if (success) {
+                    addExpense({ date: expForm.date, purpose: expForm.purpose, nominal: nominal });
+                    cancelEdit();
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil Diubah menjadi Draft!',
+                        text: 'Data lama telah dihapus dari database. Hasil edit telah disimpan sebagai draf baru di tab Preview. Silakan publikasikan ulang.',
+                        confirmButtonColor: '#047857'
+                    });
+                }
+            });
         } else {
             confirmAction('Simpan Perubahan Draft?', 'Data draft akan diperbarui.', () => { updateExpense(editingId, { date: expForm.date, purpose: expForm.purpose, nominal: nominal }); cancelEdit(); Swal.fire('Sukses', 'Draft diupdate', 'success'); });
         }
