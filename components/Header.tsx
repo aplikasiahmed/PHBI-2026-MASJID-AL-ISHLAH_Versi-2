@@ -9,7 +9,7 @@ const Header: React.FC<HeaderProps> = ({ onLoginClick }) => {
   const logoUrl = "https://lh3.googleusercontent.com/d/11_UugZNJrRxFjNSqMdUS-ENz5Sjg-eCl";
 
   return (
-    <header className="sticky top-0 z-50 bg-blue-600 text-white shadow-lg border-b-4 border-gold">
+    <header className="sticky top-0 z-50 bg-[#1055C9] text-white shadow-lg border-b-4 border-gold">
       <div className="container mx-auto px-4 py-3 flex justify-between items-center gap-3">
         
         {/* Logo & Text Container */}

@@ -167,8 +167,8 @@ const PublicHome: React.FC = () => {
 
       {/* TITLE SECTION */}
       <div className="bg-white py-6 md:py-12 px-4 text-center border-b border-gray-200 shadow-sm relative overflow-hidden">
-        <h2 className="text-xl md:text-4xl font-serif font-bold text-[#113e7b] mb-1 md:mb-3 drop-shadow-sm">LAPORAN KEUANGAN PHBI</h2>
-        <p className="text-xs md:text-xl text-[#113e7b] font-medium tracking-wide">Maulid Nabi Muhammad SAW 1448 H | 2026 M</p>
+        <h2 className="text-xl md:text-4xl font-serif font-bold text-[#245ba5] mb-1 md:mb-3 drop-shadow-sm">LAPORAN KEUANGAN PHBI</h2>
+        <p className="text-xs md:text-xl text-[#245ba5] font-medium tracking-wide">Maulid Nabi Muhammad SAW 1448 H | 2026 M</p>
       </div>
 
       <div id="report-start" className="container mx-auto px-4 mt-4 md:mt-8 space-y-4 md:space-y-12">
@@ -584,7 +584,7 @@ const PublicHome: React.FC = () => {
 
         {/* INFO REKENING & KONFIRMASI WA */}
         <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-4 md:p-8 relative overflow-hidden mt-6">
-            <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-primary via-gold to-primary"></div>
+            <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-[#1055C9] via-yellow-400 to-[#1055C9]"></div>
             <div className="flex flex-col md:flex-row items-center justify-between gap-4 md:gap-6">
                 
                 {/* QRIS Code Info */}

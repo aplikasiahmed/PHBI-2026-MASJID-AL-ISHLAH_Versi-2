@@ -5,7 +5,7 @@ const Footer: React.FC = () => {
   const logoUrl = "https://lh3.googleusercontent.com/d/11_UugZNJrRxFjNSqMdUS-ENz5Sjg-eCl";
 
   return (
-    <footer className="bg-blue-600 text-white mt-6 md:mt-12 pt-6 md:pt-10 border-t-4 border-gold">
+    <footer className="bg-[#1055C9] text-white mt-6 md:mt-12 pt-6 md:pt-10 border-t-4 border-gold">
       <div className="container mx-auto px-4 pb-4 md:pb-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8">
           
