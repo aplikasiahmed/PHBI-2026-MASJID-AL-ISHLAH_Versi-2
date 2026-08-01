@@ -9,7 +9,7 @@ const Header: React.FC<HeaderProps> = ({ onLoginClick }) => {
   const logoUrl = "https://lh3.googleusercontent.com/d/11_UugZNJrRxFjNSqMdUS-ENz5Sjg-eCl";
 
   return (
-    <header className="sticky top-0 z-50 bg-[#0065ed] text-white shadow-lg border-b-4 border-gold">
+    <header className="sticky top-0 z-50 bg-[#1d62d6] text-white shadow-lg border-b-4 border-gold">
       <div className="container mx-auto px-4 py-3 flex justify-between items-center gap-3">
         
         {/* Logo & Text Container */}
@@ -34,7 +34,7 @@ const Header: React.FC<HeaderProps> = ({ onLoginClick }) => {
         {/* Login Button */}
         <button 
           onClick={onLoginClick}
-          className="bg-[#0065ed] hover:bg-[#0052c2] text-white px-3 py-2 md:px-4 md:py-2 rounded-lg text-xs md:text-sm font-bold transition flex-shrink-0 flex items-center gap-2 shadow-md border border-[#0052c2]"
+          className="bg-[#245ba5] hover:bg-[#1c4d8c] text-white px-3 py-2 md:px-4 md:py-2 rounded-lg text-xs md:text-sm font-bold transition flex-shrink-0 flex items-center gap-2 shadow-md border border-[#1c4d8c]"
         >
           <User className="w-4 h-4" />
           <span>MASUK</span>
