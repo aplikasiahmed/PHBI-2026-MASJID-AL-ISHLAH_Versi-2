@@ -161,7 +161,7 @@ const MainContent: React.FC = () => {
                   <button 
                     onClick={handleLoginSubmit}
                     disabled={isLoading}
-                    className="flex-1 bg-[#1d62d6] text-white py-2 md:py-3 rounded-lg hover:bg-[#1551b8] font-bold shadow-md transition text-xs md:text-sm flex justify-center items-center"
+                    className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 md:py-3 rounded-lg font-bold shadow-md transition text-xs md:text-sm flex justify-center items-center"
                     type="button"
                   >
                     {isLoading ? (
