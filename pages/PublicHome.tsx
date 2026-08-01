@@ -167,8 +167,8 @@ const PublicHome: React.FC = () => {
 
       {/* TITLE SECTION */}
       <div className="bg-white py-6 md:py-12 px-4 text-center border-b border-gray-200 shadow-sm relative overflow-hidden">
-        <h2 className="text-xl md:text-4xl font-serif font-bold text-primary mb-1 md:mb-3 drop-shadow-sm">LAPORAN KEUANGAN PHBI</h2>
-        <p className="text-xs md:text-xl text-secondary font-medium tracking-wide">Maulid Nabi Muhammad SAW 1448 H | 2026 M</p>
+        <h2 className="text-xl md:text-4xl font-serif font-bold text-[#113e7b] mb-1 md:mb-3 drop-shadow-sm">LAPORAN KEUANGAN PHBI</h2>
+        <p className="text-xs md:text-xl text-[#113e7b] font-medium tracking-wide">Maulid Nabi Muhammad SAW 1448 H | 2026 M</p>
       </div>
 
       <div id="report-start" className="container mx-auto px-4 mt-4 md:mt-8 space-y-4 md:space-y-12">
