@@ -153,9 +153,20 @@ const PublicHome: React.FC = () => {
   return (
     <div className="pb-8 min-h-screen bg-gray-50">
       
+      {/* BANNER FOTO PHBI */}
+      <div className="sticky top-[52px] sm:top-[58px] md:top-[68px] z-40 bg-white py-2 md:py-3 px-3 md:px-6 border-b border-gray-200 shadow-md transition-all duration-300">
+        <div className="max-w-5xl mx-auto flex justify-center items-center">
+          <img 
+            src="https://lh3.googleusercontent.com/d/19jt4x0pKcSWMra3oWq4fX4idNJ0EHGZs" 
+            alt="Banner PHBI Maulid Nabi" 
+            className="w-full h-auto object-contain max-w-full md:max-w-4xl rounded-lg md:rounded-xl shadow-sm border border-gray-100"
+            referrerPolicy="no-referrer"
+          />
+        </div>
+      </div>
+
       {/* TITLE SECTION */}
       <div className="bg-white py-6 md:py-12 px-4 text-center border-b border-gray-200 shadow-sm relative overflow-hidden">
-        <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-primary via-gold to-primary"></div>
         <h2 className="text-xl md:text-4xl font-serif font-bold text-primary mb-1 md:mb-3 drop-shadow-sm">LAPORAN KEUANGAN PHBI</h2>
         <p className="text-xs md:text-xl text-secondary font-medium tracking-wide">Maulid Nabi Muhammad SAW 1448 H | 2026 M</p>
       </div>
