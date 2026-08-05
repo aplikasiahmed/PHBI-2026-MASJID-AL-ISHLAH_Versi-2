@@ -46,6 +46,33 @@
     </script>
     
     <style>
+      /* Custom Round Red Close Button for PDF Preview Popup (Desktop & Mobile) */
+      div:where(.swal2-container) div:where(.swal2-popup).swal-pdf-popup .swal2-close {
+        background-color: #dc2626 !important;
+        color: #ffffff !important;
+        border-radius: 50% !important;
+        width: 32px !important;
+        height: 32px !important;
+        line-height: 1 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        top: 0.5rem !important;
+        right: 0.5rem !important;
+        border: 2px solid #b91c1c !important;
+        box-shadow: 0 2px 5px rgba(220, 38, 38, 0.4) !important;
+        font-size: 1.25rem !important;
+        padding: 0 !important;
+        transition: all 0.2s ease !important;
+        outline: none !important;
+      }
+
+      div:where(.swal2-container) div:where(.swal2-popup).swal-pdf-popup .swal2-close:hover {
+        background-color: #b91c1c !important;
+        color: #ffffff !important;
+        transform: scale(1.08);
+      }
+
       /* Mobile optimization for SweetAlert2 - Compact Version (Excluding PDF Preview) */
       @media (max-width: 640px) {
         /* Container Popup Standar: Lebar 85% (Max 320px) agar tidak penuh layar */
@@ -66,7 +93,7 @@
 
         div:where(.swal2-container) div:where(.swal2-popup).swal-pdf-popup .swal2-title {
           font-size: 0.95rem !important;
-          padding: 0.2rem 1.8rem 0.2rem 0.2rem !important;
+          padding: 0.2rem 2.2rem 0.2rem 0.2rem !important;
           margin: 0 !important;
           line-height: 1.2 !important;
           text-align: left !important;
@@ -82,8 +109,9 @@
         div:where(.swal2-container) div:where(.swal2-popup).swal-pdf-popup .swal2-close {
           top: 0.25rem !important;
           right: 0.25rem !important;
-          font-size: 1.5rem !important;
-          color: #4b5563 !important;
+          width: 28px !important;
+          height: 28px !important;
+          font-size: 1.1rem !important;
         }
         
         /* Judul Standar: Ukuran 1.1rem */
