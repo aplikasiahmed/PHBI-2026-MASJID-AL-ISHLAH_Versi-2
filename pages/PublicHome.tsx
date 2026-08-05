@@ -142,8 +142,9 @@ const PublicHome: React.FC = () => {
   };
 
   const handleDownloadProposal = () => {
-    const viewUrl = "https://drive.google.com/file/d/1z54xYJFPhYsyHm0IpubQzKxkUBclwg8X/view?usp=sharing";
-    const downloadUrl = "https://drive.google.com/uc?export=download&id=1z54xYJFPhYsyHm0IpubQzKxkUBclwg8X";
+    const fileId = "1z54xYJFPhYsyHm0IpubQzKxkUBclwg8X";
+    const previewUrl = `https://drive.google.com/file/d/${fileId}/preview`;
+    const directDownloadUrl = `https://drive.google.com/uc?export=download&id=${fileId}&confirm=t`;
 
     Swal.fire({
       title: 'Proposal Maulid Nabi',
@@ -159,15 +160,38 @@ const PublicHome: React.FC = () => {
       cancelButtonText: 'Batal'
     }).then((result) => {
       if (result.isConfirmed) {
-        window.open(viewUrl, '_blank');
+        Swal.fire({
+          title: 'Proposal Maulid Nabi Muhammad SAW',
+          html: `
+            <div style="position: relative; width: 100%; height: 72vh; max-height: 800px; min-height: 380px;">
+              <iframe 
+                src="${previewUrl}" 
+                style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; border-radius: 8px;"
+                allow="autoplay"
+                title="Proposal Maulid Nabi"
+              ></iframe>
+            </div>
+          `,
+          width: '95%',
+          customClass: {
+            popup: 'max-w-4xl p-2 md:p-4'
+          },
+          showCloseButton: true,
+          showConfirmButton: false,
+          focusConfirm: false,
+        });
       } else if (result.isDenied) {
-        const link = document.createElement('a');
-        link.href = downloadUrl;
-        link.target = '_blank';
-        link.setAttribute('download', 'Proposal_Maulid_Nabi_Muhammad_SAW_1448H.pdf');
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+        // Direct download via hidden iframe without account selection or opening new tabs
+        const iframe = document.createElement('iframe');
+        iframe.style.display = 'none';
+        iframe.src = directDownloadUrl;
+        document.body.appendChild(iframe);
+        
+        setTimeout(() => {
+          if (document.body.contains(iframe)) {
+            document.body.removeChild(iframe);
+          }
+        }, 30000);
       }
     });
   };
