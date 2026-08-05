@@ -209,7 +209,7 @@ const PublicHome: React.FC = () => {
       <div className="sticky top-[52px] sm:top-[58px] md:top-[68px] z-40 bg-white py-2 md:py-3 px-3 md:px-6 border-b border-gray-200 shadow-md transition-all duration-300">
         <div className="max-w-5xl mx-auto flex justify-center items-center">
           <img 
-            src="https://lh3.googleusercontent.com/d/19jt4x0pKcSWMra3oWq4fX4idNJ0EHGZs" 
+            src="https://lh3.googleusercontent.com/d/1sAFW-MGvbfr42p1rh1ob_7Y6MNwUP1V9" 
             alt="Banner PHBI Maulid Nabi" 
             className="w-full h-auto object-contain max-w-full md:max-w-4xl rounded-lg md:rounded-xl shadow-sm border border-gray-100"
             referrerPolicy="no-referrer"
