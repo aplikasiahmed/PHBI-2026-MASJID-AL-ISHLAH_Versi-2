@@ -142,11 +142,33 @@ const PublicHome: React.FC = () => {
   };
 
   const handleDownloadProposal = () => {
+    const viewUrl = "https://drive.google.com/file/d/1z54xYJFPhYsyHm0IpubQzKxkUBclwg8X/view?usp=sharing";
+    const downloadUrl = "https://drive.google.com/uc?export=download&id=1z54xYJFPhYsyHm0IpubQzKxkUBclwg8X";
+
     Swal.fire({
+      title: 'Proposal Maulid Nabi',
+      text: 'Silakan gunakan Proposal Maulid Nabi ini sebagaimana mestinya. Panitia tidak bertanggung jawab atas segala bentuk penyalahgunaan proposal ini, dan apabila terbukti tindakan tersebut akan diproses sesuai dengan hukum yang berlaku.',
       icon: 'info',
-      title: 'Segera Hadir',
-      text: 'Dokumen Proposal Maulid Nabi sedang dalam proses penyusunan.',
-      confirmButtonColor: '#2563eb'
+      showDenyButton: true,
+      showCancelButton: true,
+      confirmButtonColor: '#1055C9',
+      denyButtonColor: '#059669',
+      cancelButtonColor: '#dc2626',
+      confirmButtonText: '👁️ Lihat Proposal',
+      denyButtonText: '📥 Download Proposal',
+      cancelButtonText: 'Batal'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        window.open(viewUrl, '_blank');
+      } else if (result.isDenied) {
+        const link = document.createElement('a');
+        link.href = downloadUrl;
+        link.target = '_blank';
+        link.setAttribute('download', 'Proposal_Maulid_Nabi_Muhammad_SAW_1448H.pdf');
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
     });
   };
 
