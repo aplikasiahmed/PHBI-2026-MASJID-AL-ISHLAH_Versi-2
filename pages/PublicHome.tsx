@@ -39,8 +39,12 @@ const PublicHome: React.FC = () => {
   const totalExpense = publishedData.expenses.reduce((acc, curr) => acc + curr.nominal, 0);
   const balance = totalIncome - totalExpense;
 
-  // Filter Weekly Data
-  const weeks = Array.from(new Set(publishedData.weeklyData.map(d => d.week))).sort();
+  // Filter Weekly Data (Sorted numerically ascending: Minggu ke-1, Minggu ke-2, ..., Minggu ke-10)
+  const weeks = Array.from(new Set(publishedData.weeklyData.map(d => d.week))).sort((a, b) => {
+    const numA = parseInt(a.replace(/\D/g, '') || '0');
+    const numB = parseInt(b.replace(/\D/g, '') || '0');
+    return numA - numB;
+  });
   
   // AUTO SELECT LATEST WEEK LOGIC
   useEffect(() => {
@@ -161,9 +165,9 @@ const PublicHome: React.FC = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         Swal.fire({
-          title: 'Proposal Maulid Nabi Muhammad SAW',
+          title: 'Proposal Maulid Nabi Muhammad SAW 1448 H / 2026 M',
           html: `
-            <div style="position: relative; width: 100%; height: 72vh; max-height: 800px; min-height: 380px;">
+            <div style="position: relative; width: 100%; height: 75vh; max-height: 800px; min-height: 380px;">
               <iframe 
                 src="${previewUrl}" 
                 style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; border-radius: 8px;"
@@ -174,24 +178,26 @@ const PublicHome: React.FC = () => {
           `,
           width: '95%',
           customClass: {
-            popup: 'max-w-4xl p-2 md:p-4'
+            popup: 'swal-pdf-popup max-w-4xl p-1 md:p-3'
           },
           showCloseButton: true,
           showConfirmButton: false,
           focusConfirm: false,
         });
       } else if (result.isDenied) {
-        // Direct download via hidden iframe without account selection or opening new tabs
-        const iframe = document.createElement('iframe');
-        iframe.style.display = 'none';
-        iframe.src = directDownloadUrl;
-        document.body.appendChild(iframe);
+        // Direct download via hidden link without account selection or opening new tabs
+        const directDownloadUrl = `https://drive.google.com/uc?export=download&id=${fileId}&confirm=t`;
+        const link = document.createElement('a');
+        link.href = directDownloadUrl;
+        link.download = 'Proposal_Maulid_Nabi_Muhammad_SAW_1448H.pdf';
+        document.body.appendChild(link);
+        link.click();
         
         setTimeout(() => {
-          if (document.body.contains(iframe)) {
-            document.body.removeChild(iframe);
+          if (document.body.contains(link)) {
+            document.body.removeChild(link);
           }
-        }, 30000);
+        }, 3000);
       }
     });
   };
