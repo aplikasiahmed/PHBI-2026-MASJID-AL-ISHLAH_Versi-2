@@ -252,7 +252,33 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       // Data draft (stagedData) hanya menyimpan perubahan/inputan baru buatan admin secara lokal sebelum diterbitkan.
       // Dihapus auto-populate yang menyalin seluruh database agar tidak terjadi duplikasi data saat dipublikasikan.
 
-      if (!notifyError && !hasCache) { Swal.close(); }
+      if (!notifyError) { 
+        Swal.close(); 
+        
+        // Memunculkan popup gambar pengumuman melayang di tengah layar setelah proses muat/refresh halaman publik
+        setTimeout(() => {
+          Swal.fire({
+            html: `
+              <div style="position: relative; display: flex; justify-content: center; align-items: center; max-width: 90vw; max-height: 85vh; margin: 0 auto;">
+                <img 
+                  src="https://lh3.googleusercontent.com/d/17_2skb6-G8jzT2Po4lQynG0qtWxi3RfF" 
+                  alt="Poster Pengumuman PHBI" 
+                  style="max-width: 90vw; max-height: 82vh; width: auto; height: auto; object-fit: contain; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); display: block;"
+                  referrerpolicy="no-referrer"
+                />
+              </div>
+            `,
+            showConfirmButton: false,
+            showCloseButton: true,
+            background: 'transparent',
+            backdrop: 'rgba(0, 0, 0, 0.75)',
+            customClass: {
+              popup: 'swal-image-popup'
+            },
+            allowOutsideClick: true
+          });
+        }, 150);
+      }
     } catch (error: any) {
       console.warn("Gagal menyinkronkan data terbaru pencatatan:", error);
       if (error?.message === "PRIVATE_SPREADSHEET") {

@@ -73,10 +73,54 @@
         transform: scale(1.08);
       }
 
-      /* Mobile optimization for SweetAlert2 - Compact Version (Excluding PDF Preview) */
+      /* Custom Styling Popup Gambar Pengumuman setelah Loading Awal */
+      div:where(.swal2-container) div:where(.swal2-popup).swal-image-popup {
+        background: transparent !important;
+        box-shadow: none !important;
+        padding: 0 !important;
+        width: auto !important;
+        max-width: 92vw !important;
+        overflow: visible !important;
+      }
+
+      div:where(.swal2-container) div:where(.swal2-popup).swal-image-popup .swal2-html-container {
+        margin: 0 !important;
+        padding: 0 !important;
+        overflow: visible !important;
+      }
+
+      div:where(.swal2-container) div:where(.swal2-popup).swal-image-popup .swal2-close {
+        position: absolute !important;
+        top: -12px !important;
+        right: -12px !important;
+        background-color: #dc2626 !important;
+        color: #ffffff !important;
+        border-radius: 50% !important;
+        width: 34px !important;
+        height: 34px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        border: 2px solid #ffffff !important;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4) !important;
+        font-size: 1.25rem !important;
+        z-index: 99 !important;
+        opacity: 1 !important;
+        cursor: pointer !important;
+        outline: none !important;
+        transition: all 0.2s ease !important;
+      }
+
+      div:where(.swal2-container) div:where(.swal2-popup).swal-image-popup .swal2-close:hover {
+        background-color: #b91c1c !important;
+        color: #ffffff !important;
+        transform: scale(1.1);
+      }
+
+      /* Mobile optimization for SweetAlert2 - Compact Version (Excluding PDF Preview & Image Popup) */
       @media (max-width: 640px) {
         /* Container Popup Standar: Lebar 85% (Max 320px) agar tidak penuh layar */
-        div:where(.swal2-container) div:where(.swal2-popup):not(.swal-pdf-popup) {
+        div:where(.swal2-container) div:where(.swal2-popup):not(.swal-pdf-popup):not(.swal-image-popup) {
           width: 85% !important;
           max-width: 320px !important;
           padding: 1rem !important;
